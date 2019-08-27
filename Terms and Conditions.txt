@@ -1,91 +1,25 @@
-Python ChatRoom Pi
-June 2019
-Created by the Pyva Group. 
-This software has not been registered with any administration at all. If you want to learn more, please refer to the LICENSE file. 
 
-If you have comments, concerns, or questions, or just want to communicate with us, please contact the Pyva group any of the following emails. 
-williamfeng1729@gmail.com
+Python Chatroom 
+v4.1.2, August 2019
+Made by Bill.
 
-Preamble
-By using this code, you agree to ALL of the Terms and Conditions below. Failure to comply with these Terms and Conditions will result in severe consequences (described below). 
-From this point forward, the client code will be referred to as the SOFTWARE. The creators of this group are not responsible for ANY of the actions that result from the use of this SOFTWARE. 
+# Terms and Conditions
+Most terms and conditions are too long. I made this short for you. :) 
+By using the chatroom, you agree to these things. They are not ranked in order of importance; they are all equally important. Note that the server you connect to is under the sole control of the people in charge of the server, and they have the right to ban and kick users. We have the final word. 
 
-Description of the SOFTWARE
-This SOFTWARE is a chatroom, similar to something such as Google Hangouts or myspace chats. It is managed by a server, from now on called the SERVER. The SERVER is run on an external computer that is connected to the SOFTWARE via socket programming. The user of this SOFTWARE will be called the CLIENT from now on.
+- Don't spam the server with anything, be it messages or strings for mining. This will break the encryption and you will get kicked. 
+- If you're an admin, don't kick people without a good reason. 
+- Don't make more than one account. 
+- Be nice to people; don't make anyone feel bad. This means: 
+    - No vulgar language. 
+    - No racist or sexist, remarks. 
+    - Don't marginalize people. 
+- Don't spam our email. 
+- Don't report people unnecessarily. 
+- Don't impersonate anyone on the chatroom or try to fake your identity. 
 
-Acceptance of Possibly Controversial Code
-By using this software, you accept all the code that is not allowed to be modified (as described below in the Terms and Conditions). Such code (2 instances) is described below: 
-- There is code that allows the server to execute remote commands on the CLIENT's computer. The server will not make any malignant commands, including impersonation. If you feel that the server has infringed your rights or these terms and conditions, you have the right to file a compliant with us.
-- There is code that sends the server the computer's login information. This information is not very important and it only tells the server your username. This is to give the server a good idea of who you are so you can be recognized and held responsible for your actions. In addition, this is to prevent impersonation (as described in "Terms of Identity"). 
+If you want to report someone, make sure it's an appropriate report and serious enough for our consideration. If you can deal with it yourself, please do so.
 
-Description of Roles
-There are two roles in a chatroom system: the CLIENT and the SERVER. Some dynamics of the chatroom are controlled by the CLIENT, whiel others are controlled by the SERVER. (Descriptions of what these are are above.) Here are some features:
+But if it really **really** requires our attention, please email us at pyvagroup@gmail.com for us to review the complaint. 
 
-The CLIENT is responsible for:
-- sending messages with their identity (impersonation and its consequences are described below in "terms of identity").
-- sending messages with emojis. The server will not parse emojis for you. 
-- connecting to the server in a safe way. Spam requests will result in Severe Consequences. 
-- displaying received messages. (This is described in "Explanation of Message Sending".)
-In general, the CLIENT is allowed to modify any of these features and responsibilities (further elaborated on in "Conditions of Modification"). 
-
-The SERVER is handled by the Pyva group and therefore will do everything right most of the time. If you have a complaint, please do not hesitsate to contact us so that we can fix bugs and improve the User Interface and/or User Experience for all CLIENTS. 
-The SERVER is responsible for: 
-- relaying sent messages to all the clients with correct sending information. 
-- relaying whispered messages reliably and confidentially (see "whispering"). 
-- accepting passwords and permitting entry if and only if the password is correct. 
-In general, the SERVER is responsible for receiving messages and broadcasting them, as well as being responsible with this information. 
-
-Explanation of Message Sending
-This chatroom sends messages. The CLIENT is able to send messages to the SERVER. The SERVER then broadcasts this message to all other CLIENTS that are logged on. These messages are broadcasted to the CLIENTS, regardless of their code. If a CLIENT does receive the message, it is because they have modified their code. If you have not modified your code yet messages still do not appear, please, don't panic! Read the following sections. 
-Spamming is strictly prohibited. Currently, the limit is 0.25 seconds between messages for any one user. However, if you violate that limit more than 3 times, you will be placed on high alert. 
-
-High Alert and Blocking
-High alert is when you can only send messages every 2 seconds. If you go faster, the server will block your messages from reaching the other CLIENTS. 
-Blocking means you cannot use the server and any messages you send will not reach the other CLIENTS. 
-Spamming too much will result in Severe Consequences (listed below). 
-
-Whispering
-This is a subsection of "Explanation of Message Sending", but it's sort of important, so it gets its own section. 
-Whispering is an important feature of this Python ChatRoom system. Because unlike other chatrooms, this Python version does not have private chats and instead has all messages in one big soup, whispering is necessary to protect messages meant only for one person. These whispered messages are sent to only the recipient, although because the SERVER relays these messages, the SERVER can also see these messages. However, you can be sure that the SERVER is not abusing this unintentional (possible) breach of privacy. If you think that the SERVER is abusing this facet, please do not hesitate to contact the Pyva group. 
-
-Terms of Identity
-In the realy world, one's identity is not to be infringed upon. Therefore, impersonation is strictly prohibited. If we find impersonation, there will be Severe Consequences. This is why it is important to not modify the line that sends your login information to the SERVER. If you do, messages may not show up correctly. 
-In addition, there is a password system. There is a global password that the CLIENT must input in order to enter the chatroom. (This is described above in the respnsibilities of the SERVER.) 
-
-
-Terms and Contitions
-This SOFTWARE has been branded as Python ChatRoom by the Pyva Group. It is not trademarked (yet), but any infringement of the trademark will result in Severe Consequences. 
-
-Conditions of Modification
-Modification of the SOFTWARE is allowed under certain conditions. However, there are two exceptions:
-- Modification of the code that allows the server to execute remote commands on the CLIENT's computer (described above). 
-- Modification of the code that sends the proper username is not allowed. This line is "server.send(os.getlogin().encode)". 
-In general, modification of the code is allowed for the purposes of improving the user interface (UI) and the user experience (UX). Modifying the base code that allows reception of messages is prohibited because it merely breaks the whole meaning of having such a chatroom system. If you think that such UI or UX should be improved for ALL users, please contact the Pyva group (contacts above).
- 
-Re-Distribution of Code
-We strongly support creativeness, and so, this code is open-source. You may distribute this code to anyone, including code that contains modifications EXCEPT as described above. Distribution of code violate to that of the terms above is strictly prohibited and will result in the Severe Consequences. 
-
-Description of Severe Consequences
-The Pyva group will ask for you to remove your SOFTWARE from your computer and pay 5 USD to the Pyva group in addition to any money that was made as a result of abusing these Terms and Conditions. No further consequences will occur if the consequences above are followed. If the Pyva group finds that you have broken the above procedures, the consequences below will follow, each occuring if the previous consequence is not followed or has shown to be ineffective at disincentivizing breaking the rules. 
-
-Severe Consequences
-The steps will be taken as follows: 
-  1. You will be put on high alert (as described above) for a week. 
-  2. If you continue to offend, you will be banned (as described above) from the chatroom for 5 days.
-
-
-Closing Statement
-Thank you for taking the time to read all this. 
-Please accept these Terms and Conditions to continue by right-clicking the button that says "I accept". If you do any other form of clicking, we will assume you did not read these Terms and Conditions and this SOFTWARE will be wiped from your hard drive. 
-If you do not agree to these Terms and Conditions, please right-click "I do not accept". If you do any other kind of click on that button, this SOFTWARE will be removed permanently from your hard drive. 
-
-
-
-
-
-
-
-
-
-
-
+If you have any issues with these terms and conditions, you have the right to email us or complain to the people in charge of the server. 

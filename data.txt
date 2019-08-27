@@ -1,0 +1,1 @@
+{"version": "v4.1.2", "agreedToTaC": false, "money": 0}
