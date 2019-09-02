@@ -1,1 +1,1 @@
-{"version": "v4.1.2", "agreedToTaC": false, "money": 0}
+{"version": "v5.0.0", "agreedToTaC": false, "fontSize": 11, "notifications": false, "loginInfo": ["", "", ""], "money": 0, "cookies": 0}

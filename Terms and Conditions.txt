@@ -1,25 +1,27 @@
 
-Python Chatroom 
-v4.1.2, August 2019
+Python Chatroom v5.0.0
+v4.0, August 2019
 Made by Bill.
 
 # Terms and Conditions
 Most terms and conditions are too long. I made this short for you. :) 
-By using the chatroom, you agree to these things. They are not ranked in order of importance; they are all equally important. Note that the server you connect to is under the sole control of the people in charge of the server, and they have the right to ban and kick users. We have the final word. 
+By using the chatroom, you agree to these things. They are all equally important. 
+Note that the server you connect to is under the sole control of the people in charge of the server, and they have the right to ban and kick users. They have the final word. 
 
-- Don't spam the server with anything, be it messages or strings for mining. This will break the encryption and you will get kicked. 
+- Don't spam the server with anything. 
+- Don't send ridiculously long messages. 
 - If you're an admin, don't kick people without a good reason. 
 - Don't make more than one account. 
 - Be nice to people; don't make anyone feel bad. This means: 
     - No vulgar language. 
     - No racist or sexist, remarks. 
     - Don't marginalize people. 
+    - No bullying. 
 - Don't spam our email. 
 - Don't report people unnecessarily. 
 - Don't impersonate anyone on the chatroom or try to fake your identity. 
+- We don't take responsibility for consequences of faulty encryption. 
 
 If you want to report someone, make sure it's an appropriate report and serious enough for our consideration. If you can deal with it yourself, please do so.
-
 But if it really **really** requires our attention, please email us at pyvagroup@gmail.com for us to review the complaint. 
-
 If you have any issues with these terms and conditions, you have the right to email us or complain to the people in charge of the server. 

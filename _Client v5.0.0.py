@@ -1,9 +1,8 @@
 
 # Python ChatRoom Client
-# v4.1.2, August 2019
+# v5.0.0, August 2019
 # Made by Bill.
 # Updates:
-#   Now you can log in from other people's computers. 
 
 # Imports first, always.
 import socket
@@ -13,6 +12,7 @@ import hashlib
 import _thread
 import sys
 import os
+import time
 
 # Encryption libraries.
 import secrets
@@ -66,7 +66,7 @@ class Client(tk.Tk):
 
         if not ('publicKey' in self.data and 'privateKey' in self.data):
             print('No keys detected...generating keys. (This may take a while.) ')
-            keys = rsa.newkeys(1024)
+            keys = rsa.newkeys(256)
             self.publicKey = keys[0]
             self.privateKey = keys[1]
             self.data['publicKey'] = (self.publicKey.n, self.publicKey.e)
@@ -81,18 +81,22 @@ class Client(tk.Tk):
         
         # Attributes.
         self.port = port
-        self.ui = ClientUI(self, self.data)
+        self.ui = ClientUI(self)
         self.username = ''
         self.dead = False
+        self.keyLength = 16
+        self.rsaKeyLength = 32
         
         # Socket stuff.
+        self.pingTime = 0
+        self.delay = 0
         self.port = port
         self.localIP = socket.gethostbyname(socket.gethostname())
         self.server = socket.socket()
 
         # Terms and conditions stuff!
         if not self.data['agreedToTaC']:
-            print('Please agree to the terms and conditions. ')
+            print('Please read the terms and conditions. ')
         else:
             self.ui.configure_login()
 
@@ -115,8 +119,9 @@ class Client(tk.Tk):
         info = self.server.recv(2048)
         info = self.decrypt(info[:-5]).split('\n')
         self.data['money'] = int(info[0])
-        self.prevHash = info[1]
-        self.hashZeroes = int(info[2])
+        self.data['cookies'] = int(info[1])
+        self.prevHash = info[2]
+        self.hashZeroes = int(info[3])
         self.server.send(b' ')
 
         # Mine away!
@@ -141,7 +146,7 @@ class Client(tk.Tk):
                 continue
 
             for message in message.split(b'\n' * 5):
-                if len(message) < 129:
+                if len(message) < self.rsaKeyLength + 1:
                     continue
                 
                 # Decryption try/catch.
@@ -159,6 +164,10 @@ class Client(tk.Tk):
                         if line.startswith('Server> You have been kicked by ') and line.endswith('. '):
                             self.dead = True
                             break
+
+                        if line == 'Server> Your password has been successfully changed. ':
+                            if hasattr(self.ui, 'cpwin'):
+                                self.ui.cpwin.destroy()
                         
                         _thread.start_new(self.ui.insert, (line,))
 
@@ -174,25 +183,43 @@ class Client(tk.Tk):
                                 self.data['money'] += int(commands[1])
                                 self.save_data()
 
+                            elif commands[0] == '/cookies':
+                                self.data['cookies'] += int(commands[1])
+                                self.save_data()
+
                             elif commands[0] == '/newHash': # New hash for the blockchain!
                                 self.prevHash = commands[1]
 
                             elif commands[0] == '/updateLeaderboard':
                                 self.ui.updateLeaderboard(' '.join(commands[1:]))
 
+                            elif line.startswith('/ping'):
+                                self.delay = time.time() - self.pingTime
+                                self.ui.insert('Server> Ping required ' + str(self.delay) + ' seconds. ')
+
+                            elif line.startswith('/e delacc '):
+                                self.ui.configure_title(line[10:], self.ui.daTitle)
+
+                            elif line.startswith('/e changepass '):
+                                self.ui.configure_title(line[14:], self.ui.cpTitle)
+
                         else:
                             _thread.start_new(self.ui.insert, (line,))
 
 
-    def send(self, message, deleteEntry = True):
+    def send(self, message, deleteEntry = False):
         '''
-        Client.send(message, deleteEntry = True)
+        Client.send(message, deleteEntry = False)
         Send a message to the server.
         This does stuff with the UI, could have used lambda, 
             but that would have taken too much space.
         '''
+        # First, parse the message for special commands.
+        if message == '/ping':
+            self.pingTime = time.time()
+        
         try:
-            key = os.urandom(32)
+            key = os.urandom(self.keyLength)
             aes = pyaes.AESModeOfOperationCTR(key)
             aesKey = rsa.encrypt(key, self.serverKey)
             keyAndMessage = aesKey + aes.encrypt(message)
@@ -202,7 +229,7 @@ class Client(tk.Tk):
                 self.ui.entry.delete(0, 'end')
             
         except:
-            print('Sorry, something went wrong. ')
+            raise Exception
 
 
     def make_account(self, event = None):
@@ -218,22 +245,22 @@ class Client(tk.Tk):
         confirm = self.ui.entries[3].get()
 
         if password != confirm:
-            self.ui.logintitle('Passwords do not match. ')
+            self.ui.configure_title('Passwords do not match. ', self.ui.title)
             return
 
         if len(username) == 0:
-            self.ui.logintitle('Please choose an appropriate username. ')
+            self.ui.configure_title('Please choose an appropriate username. ', self.ui.title)
 
         if len(password) < 8:
-            self.ui.logintitle('Password must be 8 characters or more. ')
+            self.ui.configure_title('Password must be 8 characters or more. ', self.ui.title)
 
         # Connect to the server.
-        self.ui.logintitle('Creating new account...', '#000000')
+        self.ui.configure_title('Creating new account...', self.ui.title, self.ui.fg)
         self.ui.configure_cursor('wait')
         try:
             self.server.connect((ip, self.port))
         except:
-            self.ui.logintitle('Failed to connect. Please check your IP. ')
+            self.ui.configure_title('Failed to connect. Please check your IP. ', self.ui.title)
             self.ui.configure_cursor('')
         credentials = str(self.publicKey.n) + '\n' + str(self.publicKey.e) + '\n'
         credentials += username + '\n'
@@ -248,7 +275,7 @@ class Client(tk.Tk):
         except:
             # I dunno! Let the server tell us.
             message = self.decrypt(message[:-5])
-            self.ui.logintitle(message)
+            self.ui.configure_title(message, self.ui.title)
             self.ui.configure_cursor('')
             self.server.close()
             return
@@ -267,20 +294,20 @@ class Client(tk.Tk):
         '''
         # Prevent naughty business!
         if len(self.ui.entries[0].get()) == 0:
-            self.ui.logintitle('IP field cannot be blank. ')
+            self.ui.configure_title('IP field cannot be blank. ', self.ui.title)
             return
 
         if len(self.ui.entries[1].get()) == 0:
-            self.ui.logintitle('Username field cannot be blank. ')
+            self.ui.configure_title('Username field cannot be blank. ', self.ui.title)
             return
 
         if len(self.ui.entries[2].get()) == 0:
-            self.ui.logintitle('Password field cannot be blank. ')
+            self.ui.configure_title('Password field cannot be blank. ', self.ui.title)
             return
 
         # Ok, no funny business, on to the legit stuff.
         self.server = socket.socket()
-        self.ui.logintitle('Logging in...', '#000000')
+        self.ui.configure_title('Logging in...', self.ui.title, self.ui.fg)
         self.ui.configure_cursor('wait')
         try:
             self.server.connect((self.ui.entries[0].get(), self.port))
@@ -293,7 +320,7 @@ class Client(tk.Tk):
             self.server.send(credentials.encode())
 
         except:
-            self.ui.logintitle('Failed to connect. Please check your IP. ')
+            self.ui.configure_title('Failed to connect. Please check your IP. ', self.ui.title)
             self.ui.configure_cursor('')
             return
 
@@ -309,7 +336,7 @@ class Client(tk.Tk):
             
         except:
             # Probably denied access.
-            self.ui.logintitle('Incorrect username or password. Please try again. ')
+            self.ui.configure_title('Incorrect username or password. Please try again. ', self.ui.title)
             self.ui.configure_cursor('')
             print('Login failed. ')
             return
@@ -328,9 +355,9 @@ class Client(tk.Tk):
         We use standard a symmetric CTR AES cipher with the key encrypted using RSA.
         '''
         try:
-            key = rsa.decrypt(message[:128], self.privateKey)
+            key = rsa.decrypt(message[:self.rsaKeyLength], self.privateKey)
             aes = pyaes.AESModeOfOperationCTR(key)
-            return aes.decrypt(message[128:]).decode()
+            return aes.decrypt(message[self.rsaKeyLength:]).decode()
 
         except:
             print('Could not decrypt: ' + str(message))
@@ -346,40 +373,13 @@ class Client(tk.Tk):
         json.dump(self.data, f)
         f.close()
 
-
-client = Client(1235)
-client.server.close()
-print('\nProgram terminated at ' + str(dt.now())[:-6])
-sys.exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 
+# Detect if running in IDLE or not.
+if 'idlelib' in sys.modules:
+    os.startfile(__file__)
+    sys.exit()
+    
+else:
+    client = Client(1235)
+    client.server.close()
+    print('\nProgram terminated at ' + str(dt.now())[:-6])
+    sys.exit()
