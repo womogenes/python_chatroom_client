@@ -14,11 +14,11 @@ A chatroom is a place where people can send messages instantly to another. Most 
 
 This code is the client end of such a chatroom. The **server** code (not to be confused with the **client** code, that's right here) is in a private repository, and it's not free. If you want it, please email us, and we will reply with details about serving a chatroom. However, we don't want to do that right now because documenting the server code and its API will take a long time. So...please be patient! 
 
-#### Terms and Conditions
+### Terms and Conditions
 Please, PLEASE make sure you read the Terms and Conditions first! There are lots of details that come with using the chatroom. By using this program, you agree to everything inside it. If you don't read the last paragraph, you just might have the program deleted from your computer. So, please read the Terms and Conditions! 
 
 
-#### Running the program
+### Running the program
 Starting from v4.0, we made some updates to the code structure. We rewrote v4.0 from scratch. Thus we decided to separate the real useful part of the code and the UI that makes it usable. You must run from the `_Client_<version>.py` file. Please disregard other .py files; they are used by the main program. 
 
 If you don't know how to run Python programs, we don't want to explain everything here, but you can learn how to by searching on the internet or on Stack Overflow (https://stackoverflow.com). 
@@ -28,7 +28,7 @@ We added currency as just a fun thing. However, there wasn't really any good way
 
 The details of mining are in the Mining.py file. You can edit that file to make or adapt your mining strategy. (It starts out empty.) Here's the overview. 
 
-#### Blockchain
+### Blockchain
 First, we need to know what a hash is. There are tons of other resources that explain this much better than I can. A hash is a function that takes a string of any length as an input. The function the preforms a predefined set of rules to the string to output a fixed length string. This function is such that if the string changed by *just a character*, the hash would be completely different. However, this is a function, so it returns the same value for the same inputs every time. 
 
 There are many different hash functions. In this chatroom, I use the SHA512 hash. This function always outputs strings of length 128. 
@@ -39,8 +39,8 @@ Your job is to send a string of length 86 to the server, produces a hash startin
 
 If you submit a correct string, the server rewards you some coins, and a new block is added to the blockchain with your name in it and the hash that starts with a lot of zeroes. 
 
-#### Store
-With your earned coins, you can buy things! There's not a lot of things you can buy right now. Right now, you can buy admin power (described above) with 1000 coins. (We might change the price.) 
+### Store
+With your earned coins, you can buy things! There's not a lot of things you can buy right now. Right now, you can buy admin powers and cookies. Cookies do nothing; they're for fun and for you to lessen your coins. 
 
 If you have suggestions for improving this system, please email us! We'd love to hear your ideas. In the future, we're thinking of adding a casino and a stock market. 
 
@@ -81,7 +81,7 @@ We hope to add these features.
 
 ## Requirements
 
-#### Python environment
+### Python environment
 First, if you don't have Python, you should probably download it at https://www.python.org. Then, we highly suggest you learn Python. 
 
 This code is written for Python 3.6, but it should work on earlier versions of Python. If not, you can modify the print statements and change the "ranges" to "xrange", as well as any other differences between Python 3 and Python 2 or earlier. If anything doesn't work with earlier versions of Python and you can't figure out how to fix it, feel free to contact us. 
@@ -90,7 +90,7 @@ Note that you should have tkinter installed for this. If you don't, you can make
 
 If you can't figure out how to run this program, we highly suggest learning Python first, because we want you to learn new things! It will also help with personalizing your chatroom. 
 
-#### Security
+### Security
 There are also security features for this chatroom. Obviously, one needs to know the IP address of the server to connect. However, from v4.0, we added accounts! You are required to make an account with an appropriate username and password. Here are the conditions for usernames:
 
 1. Usernames may not contain any of these characters: `<> |.:;,!?()[]{}@#\%*/\\~='"`.
@@ -101,7 +101,7 @@ One account per IP is our rule; we don't want people spamming accounts with one 
 
 Passwords are sent not in plaintext, but hashed and salted with SHA512. Passwords are stored on the server with SHA512 and with salts. (Don't worry if you don't know what that means; it means that your passwords are safe.) 
 
-#### External Libraries
+### External Libraries
 For security, we use the `rsa` and `pyaes` modules. These folders are copied from the official PyPi repositories, so installing them via `pip install` or some other way works and then you don't need to keep the files that come with the files here. But if you can't do `pip install`, then please keep the `rsa` and `pyaes` folders. 
 
 ## License
