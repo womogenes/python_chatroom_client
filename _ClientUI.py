@@ -68,8 +68,6 @@ class ClientUI():
             ctypes.windll.shcore.SetProcessDpiAwareness(2)
             self.user32 = ctypes.WinDLL('user32', use_last_error = True)
             self.masterID = self.user32.GetForegroundWindow()
-            if 'idlelib' not in sys.modules:
-                self.user32.ShowWindow(self.masterID, 0)
             print(self.masterID)
 
         # Master attributes.

@@ -375,6 +375,8 @@ class Client(tk.Tk):
 
 # Detect if running in IDLE or not.
 if 'idlelib' in sys.modules:
+    print('Debug info and other information will appear in the new window. ')
+    print('This window will no longer host useful information.')
     os.startfile(__file__)
     sys.exit()
     

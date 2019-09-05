@@ -12,7 +12,7 @@ This API isn't meant to be official or specific enough so that it can be brought
 
 ## Notes on the Code 
 First, there are a few things about the actual code that we'd like to say. 
-- Most importantly, we use some `ctypes` and `os` stuff to get the program to not run from IDLE. This improves performance a lot, but if you want to change the code, you probably want to take out the code at the bottom of the main file and in the `__init__` function of the `_ClientUI` file. 
+- Most importantly, we use some `os` stuff to get the program to not run from IDLE. This improves performance a lot, but if you want to change the code, you probably want to take out the code at the bottom of the main file and replace it with `client = Client(1235)`. 
 
 - We put a `sys.stderr = DevNull()` line to discourage errors from `tkinter` that we can't figure out how to fix. So if you're adding or removing features of the code and would like to debug, please remove that line. It's near the top. 
 
