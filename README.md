@@ -1,12 +1,14 @@
 
 # Python ChatRoom Client
 
-Welcome to the Python ChatRoom! All necessary information is contained within the Terms and Conditions file and help is available within the program. This is simply an overview. 
+Welcome to the Python ChatRoom! Most help information is in this file, but some stuff is in the `api.txt` file. 
+- You can find the API documentation inside the `api.txt` file. You don't really need to worry about this file unless you're planning on modifying the code or making your own chatroom.  
+- You can find descriptions of updates in the `revisions.txt` file. 
+- You **MUST** read the Terms and Conditions, contained in the `Terms and Conditions.txt` file, before using the chatroom. Alternatively, you can start the program and it will show them to you. 
 
 This code was created by the Pyva Group in June of 2019. It has an Un-MIT license with it, which means you are free to use it however you like, and there's no real copyright. Use it however you want! **We strongly support tinkering around with code and learning through doing.** In v4.0, we rewrote all the code so that you can change things more easily! 
 
-We'll try to reply as soon as possible, but please be patient. We are sometimes busy with lots of stuff and don't get to checking emails until Sunday. 
-If you would like to contact us about any issues listed below, simply have a comment about the program such as improvements we can make or just praise, or have anything else to say, please use the email pyvagroup@gmail.com to get in touch. 
+If you would like to contact us about any issues listed below, simply have a comment about the program such as improvements we can make or just praise, or have anything else to say, please use the email pyvagroup@gmail.com to get in touch. We'll try to reply as soon as possible, but please be patient. We usually respond in six to eight weeks. 
 
 ## Summary
 
@@ -40,44 +42,18 @@ Your job is to send a string of length 86 to the server, produces a hash startin
 If you submit a correct string, the server rewards you some coins, and a new block is added to the blockchain with your name in it and the hash that starts with a lot of zeroes. 
 
 ### Store
-With your earned coins, you can buy things! There's not a lot of things you can buy right now. Right now, you can buy admin powers and cookies. Cookies do nothing; they're for fun and for you to lessen your coins. 
+With your earned coins, you can buy things! There's not a lot of things you can buy right now. Right now, you can buy admin power (described above) with 1000 coins. (We might schange the price.) 
 
-If you have suggestions for improving this system, please email us! We'd love to hear your ideas. In the future, we're thinking of adding a casino and a stock market. 
+If you have suggestions for improving this system, please email us! We'd love to hear your ideas. In the future, we're thinking of adding a casino and a stock market. #### Security
+There are also security features for this chatroom. Obviously, one needs to know the IP address of the server to connect. However, from v4.0, we added accounts! You are required to make an account with an appropriate username and password. Here are the conditions for usernames:
 
-## Bugs
-There are no known bugs as of v4.0. 
+1. Usernames may not contain any of these characters: `<> |.:;,!?()[]{}@#\%*/\\~='"`.
+2. Duplicate usernames are not allowed. 
+3. Usernames may not be any of these keywords: "version", "keychars", "publicKey", "privateKey", "registeredIPs", "admins", or "users". 
 
-If you do find any, please email us so we can fix them! 
+One account per IP is our rule; we don't want people spamming accounts with one computer. The benefit of this system is that you get to log in on different computers while retaining the same username; also, you get to choose your username instead of having it forced upon you. 
 
-## Updates
-
-The most recent version of the chatroom (v4.0) can be found on the GitHub repository at https://github.com/Pyva-Group/python_chatroom_client. Here are a list of the updates we have managed to not lose track of. 
-
-- Update v4.0: I completely rewrote the code! There's now RSA encryption, a cleaner UI, MINING COINS, accounts (removed `os.getlogin()`), new TaC. 
-- Update v3.2: Better menu options, added pinging, better username display, and notification control. 
-- Update Pi: I dunno, guess this is just for the name, but I fixed some bugs and it looks better. :) 
-- Update v3.0: Fixed the TaC yet again, made Notebook widget for private chats! Yay! No more annoying whispering! Using tkinter.ttk instead of regular tkinter. 
-- Update v2.6: I know I created a new bug, but I don't know what else I added or what I fixed. 
-- Update v2.5: Yet again, I'm not sure. 
-- Update v2.4: I'm not really sure what I fixed here. 
-- Update v2.3: Ready to be released...again? Help menu, updated TaC.  
-- Update v2.21: READY TO BE RELEASED! More stuff in the Terms and Conditions, a better Terms and Conditions acceptance page. 
-- Update v2.2: Ready to go. Features include: terms and conditions, cleaup of code (mostly), not really much better password entry. 
-- Update v2.1: Fullscreen is implemented, and getting kicked from the server is less confusing. Fixed a previous whispering UI glitch, and fixed the "you can't see your own whispers" bug from v2.0. 
-- Update v2.0: Only the server can send stuff! No updates from the client end. 
-- Update v1.1: Added emojis! And more secure password entry. 
-- Update v1.01: Added passwords and exec() functions for naughty users! It shuts down their computers with the new script. :) 
-- Update v0.31: Added Windows XP error sounds! 
-- Update v0.3: Added whispering! 
-- Update v0.2: Better UI! Added a tkinter thing. 
-- Update v0.1: Created the whole thing. 
-
-We hope to add these features. 
-
-1. Pictures
-2. Blackjack Casino (Not with legit money.)
-3. Stock market
-4. Group chats (sorry, we haven't implemented that yet!)
+Passwords are sent not in plaintext, but hashed and salted with SHA512. Passwords are stored on the server with SHA512 and with salts. (Don't worry if you don't know what that means; it means that your passwords are safe.) 
 
 ## Requirements
 
@@ -90,19 +66,8 @@ Note that you should have tkinter installed for this. If you don't, you can make
 
 If you can't figure out how to run this program, we highly suggest learning Python first, because we want you to learn new things! It will also help with personalizing your chatroom. 
 
-### Security
-There are also security features for this chatroom. Obviously, one needs to know the IP address of the server to connect. However, from v4.0, we added accounts! You are required to make an account with an appropriate username and password. Here are the conditions for usernames:
-
-1. Usernames may not contain any of these characters: `<> |.:;,!?()[]{}@#\%*/\\~='"`.
-2. Duplicate usernames are not allowed. 
-3. Usernames may not be any of these keywords: "version", "keychars", "publicKey", "privateKey", "registeredIPs", "admins", or "users". 
-
-One account per IP is our rule; we don't want people spamming accounts with one computer. The benefit of this system is that you get to log in on different computers while retaining the same username; also, you get to choose your username instead of having it forced upon you. 
-
-Passwords are sent not in plaintext, but hashed and salted with SHA512. Passwords are stored on the server with SHA512 and with salts. (Don't worry if you don't know what that means; it means that your passwords are safe.) 
-
 ### External Libraries
 For security, we use the `rsa` and `pyaes` modules. These folders are copied from the official PyPi repositories, so installing them via `pip install` or some other way works and then you don't need to keep the files that come with the files here. But if you can't do `pip install`, then please keep the `rsa` and `pyaes` folders. 
 
 ## License
-We don't actually have a license for this. We made the Un-MIT license that uses Un-copyright (that's not a real thing). So, uh...you can use it however you want! There's nothing we can use against you, because again, **we strongly support tinkering around with code and learning through doing.** 
+We don't actually have a license for this. We made the Un-MIT license that uses Un-copyright (that's not a real thing). So, you can use it however you want! There's nothing we can use against you, because again, **we strongly support tinkering around with code and learning through doing.** 
