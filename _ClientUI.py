@@ -1,7 +1,7 @@
 
 # Python ChatRoom Client
 #   ClientUI.py
-# v4.1.0, August 2019
+# v5.0.1, October 2019
 
 # Agh, imports.
 import ctypes
@@ -140,7 +140,7 @@ class ClientUI():
         self.button.grid(row = 4, column = 2, padx = 5, pady = 5, sticky = 'w')
         self.rButton.grid(row = 4, column = 4, padx = 5, pady = 5, sticky = 'e')
         self.savePassCB.grid(row = 4, column = 3, padx = 5, pady = 5, sticky = 'w')
-        self.title.grid(row = 0, column = 1, pady = (5, 0), columnspan = 4, sticky = 'ew')
+        self.title.grid(row = 0, column = 1, padx = 10, pady = 10, columnspan = 4, sticky = 'ew')
         
 
     def insert(self, message, title = None):
@@ -160,7 +160,7 @@ class ClientUI():
         # Check for whispers and errors, and format appropriately.
         whisper = False
         error = False
-        if substance.startswith('/w ') and username != 'Server' and title == None:
+        if substance.startswith('/w ') and title == None:
             whisper = True
             # If we whisper to somebody else, have it be in the same chat.
             if substance.startswith('/w To:') and username == self.master.username:
@@ -172,10 +172,12 @@ class ClientUI():
                 # Otherwise, somebody else has whispered to us.
                 title = username
                 
-            if title not in self.chatBoxes:
+            if title not in self.chatBoxes and username != 'Server':
                 self.new_chat(title)
                 self.insert('Server> This is your private chat with ' + title + '. ', title)
-            self.chats.select(self.chatFrames[title]) # Put the appropriate tab into focus.
+                self.chats.select(self.chatFrames[title]) # Put the appropriate tab into focus.
+            if username == 'Server':
+                title = 'Lobby'
 
         if title == None:
             title = self.chats.tab(self.chats.select(), 'text')
@@ -250,7 +252,8 @@ class ClientUI():
         # Configure the chatroom.
         self.title['text'] = 'Please enter the IP and your new account info. '
         self.title['fg'] = '#000000'
-        self.title.grid()
+        self.title['width'] = self.title['width'] + 20
+        self.title.grid(columnspan = 3)
         self.button['text'] = 'Back'
         self.button.configure(command = self.configure_login)
         self.button.grid(row = 5, column = 2)
@@ -259,7 +262,7 @@ class ClientUI():
         self.entries[0].focus_set()
         self.entries.append(ttk.Entry(self.master, width = self.entries[0]['width'], show = self.entries[2]['show'], font = self.font))
         self.labels.append(ttk.Label(self.master,text = 'Confirm Password: '))
-        self.entries[3].grid(row = 4, column = 2, columnspan = 2)
+        self.entries[3].grid(row = 4, column = 2, columnspan = 3)
         self.labels[3].grid(row = 4, column = 0, padx = 5, pady = 5, columnspan = 2, sticky = 'e')
 
         # Now make the proper stuff.

@@ -1,6 +1,5 @@
 
-
-# Python Chatroom v5.0.0 API 
+# Python Chatroom v5.0.1 API 
 
 **If you just want a list of commands, you only have to read the "Commands" section.**
 

@@ -1,7 +1,7 @@
 
-Python Chatroom v5.0.0
-v5.0, August 2019
-Made by Bill.
+Python Chatroom v5.0.1
+v4.0, October 2019
+Made by womogenes.
 
 # Terms and Conditions
 Most terms and conditions are too long. I made this short for you. :) 
