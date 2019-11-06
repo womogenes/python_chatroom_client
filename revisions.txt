@@ -2,6 +2,7 @@
 
 The most recent version of the chatroom (v5.0.1) can be found on the GitHub repository at https://github.com/womogenes/python_chatroom_client. Here are a list of the updates we have managed to not lose track of. 
 
+- Update v5.0.2: Fixed some UI issues, and pining works now. 
 - Update v5.0.1: Fixed a lot of bugs. Whispers from the server now show up, font is bigger, and notifications on is default.
 - Update v5.0.0: Fixed a LOT of bugs, added font size customization, notifications, autoscrolling, personal colours, deleting accounts, changing passwords. I made the API. Runs from terminal instead of IDLE, so it's a LOT faster. 
 - Updates v4.1.0 - v4.1.2: Passwords are now sent salted with 

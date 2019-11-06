@@ -1,7 +1,7 @@
 
 # Python ChatRoom Client
 #   ClientUI.py
-# v5.0.1, October 2019
+# v5.0.2, November 2019
 
 # Agh, imports.
 import ctypes
@@ -278,16 +278,16 @@ class ClientUI():
         We add Lobby first.
         '''
         self.chatFrames[title] = tk.Frame(self.chats, bg = self.bg, width = 100, height = 60)
-        self.chatFrames[title].columnconfigure(0, weight = 0)
-        self.chatFrames[title].columnconfigure(1, weight = 1)
-        self.chatFrames[title].columnconfigure(2, weight = 0)
+        self.chatFrames[title].columnconfigure(0, weight = 1)
+        self.chatFrames[title].columnconfigure(1, weight = 2)
+        self.chatFrames[title].columnconfigure(2, weight = 1)
         self.scrollbars[title] = tk.Scrollbar(self.chatFrames[title], command = lambda *args: self.onvsb(*args, title = title))
         
         self.chatBoxes[title] = []
         widths = [20, 60, 30]
         for i in range(3):
             self.chatBoxes[title].append(tk.Listbox(self.chatFrames[title], width = widths[i], height = 20, font = self.font, relief = 'flat'))
-            self.chatBoxes[title][i].configure(bd = 0, fg = self.fg, highlightthickness = 0, selectmode = 'browse', takefocus = False)
+            self.chatBoxes[title][i].configure(bd = 0, fg = self.fg, highlightthickness = 0, selectmode = 'browse')
             self.chatBoxes[title][i].configure(yscrollcommand = self.scrollbars[title].set)
             self.chatBoxes[title][i].bind('<MouseWheel>', lambda event: self.mouse_wheel(event, title))
             self.chatBoxes[title][i].grid(row = 0, column = i, padx = 5, sticky = 'we')
