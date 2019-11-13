@@ -60,7 +60,7 @@ Passwords are sent not in plaintext, but hashed and salted with SHA512. Password
 ### Python environment
 First, if you don't have Python, you should probably download it at https://www.python.org. Then, we highly suggest you learn Python. 
 
-This code is written for Python 3.6, but it should work on earlier versions of Python. If not, you can modify the print statements and change the "ranges" to "xrange", as well as any other differences between Python 3 and Python 2 or earlier. If anything doesn't work with earlier versions of Python and you can't figure out how to fix it, feel free to contact us. 
+This code is written for Python 3, but it should work on earlier versions of Python so long as you modify the syntax differences. If anything doesn't work with earlier versions of Python and you can't figure out how to fix it, feel free to contact us. 
 
 Note that you should have tkinter installed for this. If you don't, you can make changes to `_Client_<version>.py` to not be dependent on tkinter; there's only a few lines you'll need to change. 
 

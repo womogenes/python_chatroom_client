@@ -3,7 +3,7 @@
 
 **If you just want a list of commands, you only have to read the "Commands" section.**
 
-Here you go! I really should have included this before. Now I've read about Semantic Versioning, so this is going to be part of the v5.0 update. This is the API documentation for chatroom v5.0.0. If you have no idea what an API is or you don't care about how the code works, you can safely ignore this document. However, if you are interested, I think it would be a fun thing to just read through this regardless of if you know what an API is. 
+Here you go! I really should have included this before. Now I've read about Semantic Versioning, so this is going to be part of the v5.0 update. This is the API documentation for chatroom v5.0. If you have no idea what an API is or you don't care about how the code works, you can safely ignore this document. However, if you are interested, I think it would be a fun thing to just read through this regardless of if you know what an API is. 
 
 It's okay to not understand everything! We don't expect you to understand everything. We encourage you to learn more about things you don't get. Please do not feel discouraged by words or concepts you do not know. If you can't be bothered, most of the special words here aren't very important anyway, so you can just read on without looking it up. 
 
