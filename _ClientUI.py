@@ -36,7 +36,7 @@ class ClientUI():
         self.font = ('Segoe UI', self.master.data['fontSize'])
         self.sFont = (self.font[0], self.font[1] - 2)
         self.bFont = (self.font[0], self.font[1] + 5)
-        self.iconDir = 'pyva.ico'
+        self.iconDir = 'pyva.ico' # I'll check for non-win and use PhotoImage later
         self.prefix = ''
         self.whispercolor = '#0051FF'
         self.errorcolor = '#FF0000'
@@ -60,9 +60,9 @@ class ClientUI():
         self.accMenu = None
 
         self.style = ttk.Style()
-        if sys.platform.startswith("win32"):
+        if sys.platform.startswith('win32'):
             self.style.theme_use('vista')
-        elif sys.platform.startswith("linux"):
+        elif sys.platform.startswith('linux'):
             self.style.theme_use('clam')
         else:
             self.style.theme_use('default')
@@ -77,7 +77,7 @@ class ClientUI():
 
         # Master attributes.
         try: self.master.iconbitmap(self.iconDir)
-        except: pass # I'll use PhotoImage later
+        except: pass
         self.master.resizable(True, True)
         self.master['bg'] = 'white'
         self.master.protocol('WM_DELETE_WINDOW', lambda event = None: _thread.start_new(self.on_closing, ()))
