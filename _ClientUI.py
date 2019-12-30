@@ -1,7 +1,7 @@
 
 # Python ChatRoom Client
 #   ClientUI.py
-# v5.0.2, November 2019
+# v5.0.3, November 2019
 
 # Agh, imports.
 import ctypes
@@ -16,7 +16,7 @@ from datetime import datetime as dt
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as messagebox
-import tkinter.colorchooser as colourchooser
+import tkinter.colorchooser as colorchooser
 
 class ClientUI():
     '''
@@ -38,9 +38,9 @@ class ClientUI():
         self.bFont = (self.font[0], self.font[1] + 5)
         self.iconDir = 'pyva.ico'
         self.prefix = ''
-        self.whisperColour = '#0051FF'
-        self.errorColour = '#FF0000'
-        self.personalColour = '#33A314'
+        self.whispercolor = '#0051FF'
+        self.errorcolor = '#FF0000'
+        self.personalcolor = '#33A314'
         self.bg = '#FFFFFF'
         self.fg = '#000000'
         self.savePass = tk.IntVar()
@@ -60,7 +60,12 @@ class ClientUI():
         self.accMenu = None
 
         self.style = ttk.Style()
-        self.style.theme_use('vista')
+        if sys.platform.startswith("win32"):
+            self.style.theme_use('vista')
+        elif sys.platform.startswith("linux"):
+            self.style.theme_use('clam')
+        else:
+            self.style.theme_use('default')
         self.configure_style()
         
         # ctypes hacking?
@@ -71,7 +76,8 @@ class ClientUI():
             print(self.masterID)
 
         # Master attributes.
-        self.master.iconbitmap(self.iconDir)
+        try: self.master.iconbitmap(self.iconDir)
+        except: pass # I'll use PhotoImage later
         self.master.resizable(True, True)
         self.master['bg'] = 'white'
         self.master.protocol('WM_DELETE_WINDOW', lambda event = None: _thread.start_new(self.on_closing, ()))
@@ -128,15 +134,16 @@ class ClientUI():
         self.labels = []
         for i in ['IP Address: ', 'Username: ', 'Password: ']:
             self.labels.append(ttk.Label(self.master, text = i))
-
-        # Gridding!
-        info = self.master.data['loginInfo']
-        for i in range(3):
-            self.entries[i].insert(0, info[i])
         
         for i in range(3):
             self.entries[i].grid(row = i + 1, column = 2, padx = 5, columnspan = 3)
             self.labels[i].grid(row = i + 1, column = 0, padx = 5, pady = 5, columnspan = 2, sticky = 'e')
+            
+        # Gridding!
+        info = self.master.data['loginInfo']
+        for i in range(3):
+            self.entries[i].insert(0, info[i])
+            
         self.button.grid(row = 4, column = 2, padx = 5, pady = 5, sticky = 'w')
         self.rButton.grid(row = 4, column = 4, padx = 5, pady = 5, sticky = 'e')
         self.savePassCB.grid(row = 4, column = 3, padx = 5, pady = 5, sticky = 'w')
@@ -203,18 +210,18 @@ class ClientUI():
             for i in range(3):
                 self.chatBoxes[self.chats.tab(self.chats.select(), 'text')][i].see('end')
 
-        # Colouring!
+        # coloring!
         if whisper and username != self.master.username:
-            self.chatBoxes[title][0].itemconfig('end', {'fg': self.whisperColour})
-            self.chatBoxes[title][1].itemconfig('end', {'fg': self.whisperColour})
+            self.chatBoxes[title][0].itemconfig('end', {'fg': self.whispercolor})
+            self.chatBoxes[title][1].itemconfig('end', {'fg': self.whispercolor})
 
         elif error:
-            self.chatBoxes[title][0].itemconfig('end', {'fg': self.errorColour})
-            self.chatBoxes[title][1].itemconfig('end', {'fg': self.errorColour})
+            self.chatBoxes[title][0].itemconfig('end', {'fg': self.errorcolor})
+            self.chatBoxes[title][1].itemconfig('end', {'fg': self.errorcolor})
 
         if username == self.master.username:
-            self.chatBoxes[title][0].itemconfig('end', {'fg': self.personalColour})
-            self.chatBoxes[title][1].itemconfig('end', {'fg': self.personalColour})
+            self.chatBoxes[title][0].itemconfig('end', {'fg': self.personalcolor})
+            self.chatBoxes[title][1].itemconfig('end', {'fg': self.personalcolor})
 
         # After that, raise notifications if necessary.
         if self.master.focus_get() == None and self.notifications.get() == 1 and not self.notified:
@@ -225,15 +232,16 @@ class ClientUI():
             nfWin.resizable(False, False)
             nfWin.title(self.master.title() + ' Notification')
             nfWin.protocol('WM_DELETE_WINDOW', lambda: self.close_notification(nfWin))
-            nfWin.iconbitmap(self.iconDir)
+            try: nfWin.iconbitmap(self.iconDir)
+            except: pass
             nfWin.config(bg = self.bg)
             description = ttk.Label(nfWin, text = 'You have a new message: ')
             if whisper:
                 label = tk.Label(nfWin, bg = self.bg, text = username + '> ' + substance[3:], font = self.font)
-                label.config(fg = self.whisperColour)
+                label.config(fg = self.whispercolor)
             elif error:
                 label = tk.Label(nfWin, bg = self.bg, text = username + '> ' + substance[3:], font = self.font)
-                label.config(fg = self.errorColour)
+                label.config(fg = self.errorcolor)
             else:
                 label = tk.Label(nfWin, bg = self.bg, text = username + '> ' + substance, font = self.font)
                 
@@ -335,9 +343,9 @@ class ClientUI():
         self.statsMenu.add_command(label = 'Leaderboard', command = self.createLeaderboard)
         self.menubar.add_cascade(label = 'Statistics', menu = self.statsMenu)
 
-        self.optionsMenu.add_command(label = 'Edit Whisper Colour', command = lambda: self.edit_colour('whisper'))
-        self.optionsMenu.add_command(label = 'Edit Error Colour', command = lambda: self.edit_colour('error'))
-        self.optionsMenu.add_command(label = 'Edit Personal Colour', command = lambda: self.edit_colour('personal'))
+        self.optionsMenu.add_command(label = 'Edit Whisper color', command = lambda: self.edit_color('whisper'))
+        self.optionsMenu.add_command(label = 'Edit Error color', command = lambda: self.edit_color('error'))
+        self.optionsMenu.add_command(label = 'Edit Personal color', command = lambda: self.edit_color('personal'))
         self.optionsMenu.add_separator()
         self.optionsMenu.add_checkbutton(label = 'Notifications', variable = self.notifications, command = self.configure_notifications)
     
@@ -403,20 +411,20 @@ class ClientUI():
                     self.chatBoxes[title][i].config(font = self.font)
 
 
-    def configure_title(self, message, widget, colour = None):
+    def configure_title(self, message, widget, color = None):
         '''
-        ClientUI.loginerror(message, window, colour = None)
+        ClientUI.loginerror(message, window, color = None)
         Changes the login title in given window.
         '''
-        if colour == None:
-            colour = self.errorColour
+        if color == None:
+            color = self.errorcolor
 
-        try:
-            widget['fg'] = colour
-            widget['text'] = message
+        if True: #try:
+            widget.config(fg = color)
+            widget.config(text = message)
             widget.grid(row = 0, column = 2)
             
-        except:
+        else: #except:
             print(message)
 
 
@@ -467,7 +475,8 @@ class ClientUI():
         self.cfwin.transient(self.master)
         self.cfwin.resizable(False, False)
         self.cfwin.title('Choose the font size')
-        self.cfwin.iconbitmap(self.iconDir)
+        try: self.cfwin.iconbitmap(self.iconDir)
+        except: pass
         self.cfwin.config(bg = self.bg)
         self.spinbox = ttk.Spinbox(self.cfwin, width = 10, from_ = 1, to_ = 72, wrap = True, font = self.sFont)
         self.spinbox.set(self.font[1])
@@ -547,17 +556,17 @@ class ClientUI():
         return 'break'
 
 
-    def edit_colour(self, colour):
+    def edit_color(self, color):
         '''
-        ClientUI.edit_colour(colour)
-        Personalizes a colour!
+        ClientUI.edit_color(color)
+        Personalizes a color!
         '''
-        if colour == 'whisper':
-            self.whisperColour = colourchooser.askcolor(parent = self.master, title = 'Choose Colour of Whispers')[1]
-        elif colour == 'error':
-            self.errorColour = colourchooser.askcolor(parent = self.master, title = 'Choose Colour of Errors')[1]
-        elif colour == 'personal':
-            self.personalColour = colourchooser.askcolor(parent = self.master, title = 'Choose Your Personal Colour')[1]
+        if color == 'whisper':
+            self.whispercolor = colorchooser.askcolor(parent = self.master, title = 'Choose color of Whispers')[1]
+        elif color == 'error':
+            self.errorcolor = colorchooser.askcolor(parent = self.master, title = 'Choose color of Errors')[1]
+        elif color == 'personal':
+            self.personalcolor = colorchooser.askcolor(parent = self.master, title = 'Choose Your Personal color')[1]
 
 
     def close_notification(self, notificationWindow):
@@ -580,7 +589,8 @@ class ClientUI():
         self.toplevels.add(ipInfoWin)
         ipInfoWin.transient(self.master)
         ipInfoWin.title(ipInfoWin.title() + ' IP Information')
-        ipInfoWin.iconbitmap(self.iconDir)
+        try: ipInfoWin.iconbitmap(self.iconDir)
+        except: pass
         ipInfoWin.grid_rowconfigure(0, weight = 1)
         ipInfoWin.grid_columnconfigure(0, weight = 1)
         closeButton = ttk.Button(ipInfoWin, text = 'Close', command = ipInfoWin.destroy)
@@ -631,7 +641,8 @@ class ClientUI():
         '''
         win = tk.Toplevel()
         self.toplevels.add(win)
-        win.iconbitmap(self.iconDir)
+        try: win.iconbitmap(self.iconDir)
+        except: pass
         win.transient(self.master)
         win.config(bg = self.bg)
         win.grid_rowconfigure(0, weight = 1)
@@ -684,7 +695,8 @@ class ClientUI():
         self.toplevels.add(self.leaderboard)
         self.leaderboard.transient(self.master)
         self.leaderboard.title('Mining Leaderboard')
-        self.leaderboard.iconbitmap(self.iconDir)
+        try: self.leaderboard.iconbitmap(self.iconDir)
+        except: pass
         self.leaderboard.grid_rowconfigure(0, weight = 1)
         self.leaderboard.grid_columnconfigure(0, weight = 2)
         self.leaderboard.grid_columnconfigure(1, weight = 3)
@@ -766,8 +778,9 @@ class ClientUI():
         self.dawin.config(bg = self.bg)
         self.dawin.grid_columnconfigure(2, weight = 1)
         
-        self.dawin.iconbitmap(self.iconDir)
-        self.daTitle = ttk.Label(self.dawin, text = 'To confirm deletion, please enter your password below. ')
+        try: self.dawin.iconbitmap(self.iconDir)
+        except: pass
+        self.daTitle = tk.Label(self.dawin, text = 'To confirm deletion, please enter your password below. ', font = self.font, fg = self.fg, bg = self.bg)
         self.daPassEntry = ttk.Entry(self.dawin, width = 50, font = self.font)
         self.daPassEntry.config(show = '•')
         self.daPassEntry.focus_set()
@@ -791,14 +804,16 @@ class ClientUI():
             try_change_pass(event = None)
             Inconvenient handle for return.
             '''
-            if len(self.cpPassEntry.get()) + len(self.cpNewPassEntry.get()) == 0:
+            if len(self.cpPassEntry.get()) * len(self.cpNewPassEntry.get()) == 0:
                 return
             oldpass = hashlib.sha512((self.cpPassEntry.get() + self.master.username).encode()).hexdigest()
             newpass = hashlib.sha512((self.cpNewPassEntry.get() + self.master.username).encode()).hexdigest()
+            self.master.data['loginInfo'][2] = ''
+            self.master.save_data()
             creds = ('/newpass ' + oldpass + ' ' + newpass).encode()
             self.master.send(creds)
-            self.cpPassEntry.delete(1.0, 'end')
-            self.cpNewPassEntry.delete(1.0, 'end')
+            self.cpPassEntry.delete(0, 'end')
+            self.cpNewPassEntry.delete(0, 'end')
             self.cpPassEntry.focus_set()
             
         self.cpwin = tk.Toplevel(self.master)
@@ -808,8 +823,9 @@ class ClientUI():
         self.cpwin.config(bg = self.bg)
         self.cpwin.grid_columnconfigure(2, weight = 1)
         
-        self.cpwin.iconbitmap(self.iconDir)
-        self.cpTitle = ttk.Label(self.cpwin, text = 'To change your password, please enter your info below. ')
+        try: self.cpwin.iconbitmap(self.iconDir)
+        except: pass
+        self.cpTitle = tk.Label(self.cpwin, text = 'To change your password, please enter your info below. ', font = self.font, fg = self.fg, bg = self.bg)
         self.cpPassEntry = ttk.Entry(self.cpwin, width = 50, font = self.font, show = '•')
         self.cpNewPassEntry = ttk.Entry(self.cpwin, width = 50, font = self.font, show = '•')
         self.cpPassEntry.focus_set()
