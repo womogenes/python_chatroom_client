@@ -66,15 +66,9 @@ class Client(tk.Tk):
         f.close()
 
         print('Generating encryption keys...')
-        keys = rsa.newkeys(1024)
+        keys = rsa.newkeys(256)
         self.publicKey = keys[0]
         self.privateKey = keys[1]
-        self.publicKey = rsa.PublicKey(self.data['publicKey'][0], self.data['publicKey'][1])
-        self.privateKey = rsa.PrivateKey(self.data['privateKey'][0], 
-                                         self.data['privateKey'][1], 
-                                         self.data['privateKey'][2], 
-                                         self.data['privateKey'][3], 
-                                         self.data['privateKey'][4])
         
         # Attributes.
         self.port = port
