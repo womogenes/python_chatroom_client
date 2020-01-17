@@ -242,22 +242,25 @@ class Client(tk.Tk):
 
         if len(username) == 0:
             self.ui.configure_title('Please choose an appropriate username. ', self.ui.title)
+            return
 
         if len(password) < 8:
             self.ui.configure_title('Password must be 8 characters or more. ', self.ui.title)
+            return
 
         # Connect to the server.
         self.ui.configure_title('Creating new account...', self.ui.title, self.ui.fg)
         self.ui.configure_cursor('wait')
         try:
             self.server.connect((ip, self.port))
+            credentials = str(self.publicKey.n) + '\n' + str(self.publicKey.e) + '\n'
+            credentials += username + '\n'
+            credentials += hashlib.sha512((password + username).encode()).hexdigest() + '\nnewacc'
+            self.server.send(credentials.encode())
         except:
             self.ui.configure_title('Failed to connect. Please check your IP. ', self.ui.title)
             self.ui.configure_cursor('')
-        credentials = str(self.publicKey.n) + '\n' + str(self.publicKey.e) + '\n'
-        credentials += username + '\n'
-        credentials += hashlib.sha512((password + username).encode()).hexdigest() + '\nnewacc'
-        self.server.send(credentials.encode())
+            return
             
         message = self.server.recv(2048)
         try:
