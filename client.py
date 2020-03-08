@@ -1,9 +1,6 @@
 
-# Python ChatRoom Client
-# v5.0.4, January 2020
+# Python Chatroom Client
 # Made by womogenes.
-# Updates:
-# UI fix! Pinging!
 
 # Imports first, always.
 import socket
@@ -20,7 +17,7 @@ import rsa
 import pyaes
 
 # ExTeRnAl ImPoRtS!?
-from _ClientUI import *
+from _clientUI import *
 import Mining
 
 # Stopping errors. 
