@@ -2,6 +2,7 @@
 
 The most recent version of the chatroom can be found on the GitHub repository at https://github.com/womogenes/python_chatroom_client. Here are a list of the updates we have managed to not lose track of. 
 
+- Update v5.0.5: Fixed more UI bugs and stuff.
 - Update v5.0.4: Generate new encryption keys each time you start up.
 - Update v5.0.3: Fixed some UI stuff with changing passwords. 
 - Update v5.0.2: Fixed some UI issues, and pinging works now. 
