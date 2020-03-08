@@ -17,7 +17,7 @@ import rsa
 import pyaes
 
 # ExTeRnAl ImPoRtS!?
-from _clientUI import *
+from clientUI import *
 import Mining
 
 # Stopping errors. 
