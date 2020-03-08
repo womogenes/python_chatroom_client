@@ -279,9 +279,9 @@ class ClientUI():
         We add Lobby first.
         '''
         self.chatFrames[title] = tk.Frame(self.chats, bg = self.bg, width = 100, height = 60)
-        self.chatFrames[title].columnconfigure(0, weight = 1)
-        self.chatFrames[title].columnconfigure(1, weight = 2)
-        self.chatFrames[title].columnconfigure(2, weight = 1)
+        self.chatFrames[title].columnconfigure(0, weight = 0)
+        self.chatFrames[title].columnconfigure(1, weight = 1)
+        self.chatFrames[title].columnconfigure(2, weight = 0)
         self.scrollbars[title] = tk.Scrollbar(self.chatFrames[title], command = lambda *args: self.onvsb(*args, title = title))
         
         self.chatBoxes[title] = []
@@ -322,8 +322,6 @@ class ClientUI():
             else:
                 widget.grid_forget()
         self.master.resizable(True, True)
-        self.master.grid_rowconfigure(0, weight = 1)
-        self.master.grid_columnconfigure(1, weight = 1)
 
         # Add new menu stuff!        
         self.helpMenu = tk.Menu(self.menubar, tearoff = 0, font = self.sFont)
@@ -364,6 +362,9 @@ class ClientUI():
         self.chats.grid(row = 2, column = 0, padx = 5, pady = 5, columnspan = 2, sticky = 'new')
         self.entry.grid(row = 3, column = 1, padx = (0, 5), pady = 5, columnspan = 2, sticky = 'swe')
         ttk.Label(self.master, text = self.master.username + '>').grid(row = 3, column = 0, padx = (5, 0), pady = 5)
+        
+        self.master.grid_rowconfigure(0, weight = 1)
+        self.master.grid_columnconfigure(1, weight = 1)
 
 
     def configure_style(self):

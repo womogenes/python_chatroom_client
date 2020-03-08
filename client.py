@@ -52,7 +52,7 @@ class Client(tk.Tk):
         Makes a new Client object to handle socket stuff.
         
         port is the port of choice.
-        I made it 1234 by default, you can do whatever.
+        I made it 1235 by default, you can do whatever.
         '''
         tk.Tk.__init__(self)
         
