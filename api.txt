@@ -57,8 +57,8 @@ If the login or creation of a new account was unsuccessfully, the connection wil
 ### Information 
 1. Once you have provided correct credentials, the server sends you their public key non-encrypted in the form `[modulus]\n[exponent]`. You should use this to encrypt all messages you send to the server after this point. 
 2. You then must send the server an acknowledgement. This can be anything but must be something. For example, you can send the individual byte `b' '`, no buffering required. 
-3. The server then sends you information in this format: `[money]\n[cookies]\n[prevHash]\n[hashZeroes]`, encrypted and with buffering at the end. `[money]` is your monetary balance. `[cookies]` is how many cookies you have. 
-	- `[prevHash]` and `[hashZeroes]` are necessary for mining, details of which are in `Mining.py`, but you don't have to do anything with these if you don't want. 
+3. The server then sends you information in this format: `[money]\n[cookies]\n[prev_hash]\n[hash_zeros]`, encrypted and with buffering at the end. `[money]` is your monetary balance. `[cookies]` is how many cookies you have. 
+	- `[prev_hash]` and `[hash_zeros]` are necessary for mining, details of which are in `Mining.py`, but you don't have to do anything with these if you don't want. 
 4. Then, you must send another acknowledgement message, and as before, it can be a single byte. 
 
 ## Commands (sent to the server) 

@@ -91,7 +91,7 @@ class ClientUI():
         Configures the login screen!
         This is a necessary function for the terms and conditions stuff.
         """
-        print(f"Your local IP is {self.master.localIP}. ")
+        print(f"Your local IP is {self.master.local_ip}. ")
         print("Please sign in with the new window. ")
 
         # Set up as login frame first.
@@ -220,20 +220,24 @@ class ClientUI():
         # Based on settings, see the end.
         if autoscroll:
             for i in range(3):
-                self.chat_boxes[self.chats.tab(self.chats.select(), "text")][i].see("end")
+                self.chat_boxes[self.chats.tab(
+                    self.chats.select(), "text")][i].see("end")
 
         # coloring!
         if whisper and username != self.master.username:
             for i in (0, 1):
-                self.chat_boxes[title][i].itemconfig("end", {"fg": self.whisper_color})
+                self.chat_boxes[title][i].itemconfig(
+                    "end", {"fg": self.whisper_color})
 
         elif error:
             for i in (0, 1):
-                self.chat_boxes[title][i].itemconfig("end", {"fg": self.error_color})
+                self.chat_boxes[title][i].itemconfig(
+                    "end", {"fg": self.error_color})
 
         if username == self.master.username:
             for i in (0, 1):
-                self.chat_boxes[title][i].itemconfig("end", {"fg": self.personal_color})
+                self.chat_boxes[title][i].itemconfig(
+                    "end", {"fg": self.personal_color})
 
         # After that, raise notifications if necessary.
         if self.master.focus_get() is None and self.notifications.get() == 1 and not self.notified:
@@ -242,7 +246,7 @@ class ClientUI():
             self.top_levels.add(nf_win)
             nf_win.attributes("-topmost", True)
             nf_win.resizable(False, False)
-            nf_win.title(self.master.title() + " Notification")
+            nf_win.title(f"{self.master.title()} Notification")
             nf_win.protocol(
                 "WM_DELETE_WINDOW",
                 lambda: self.close_notification(nf_win)
@@ -254,12 +258,14 @@ class ClientUI():
                 label = tk.Label(
                     nf_win, bg=self.bg, text=f"{username}> {substance[3:]}", font=self.font
                 )
-                label.config(fg=self.whisper_color if whisper else self.error_color)
+                label.config(
+                    fg=self.whisper_color if whisper else self.error_color)
             else:
                 label = tk.Label(
                     nf_win, bg=self.bg, text=f"{username}> {substance}", font=self.font)
 
-            description.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="w")
+            description.grid(row=0, column=0, padx=20,
+                             pady=(20, 0), sticky="w")
             label.grid(row=1, column=0, padx=20, sticky="w")
 
             close_button = ttk.Button(
@@ -293,7 +299,8 @@ class ClientUI():
         ))
         self.labels.append(ttk.Label(self.master, text="Confirm Password: "))
         self.entries[3].grid(row=4, column=2, columnspan=3)
-        self.labels[3].grid(row=4, column=0, padx=5, pady=5, columnspan=2, sticky="e")
+        self.labels[3].grid(row=4, column=0, padx=5,
+                            pady=5, columnspan=2, sticky="e")
 
         # Now make the proper stuff.
         self.r_button["text"] = "Create New Account"
@@ -365,7 +372,8 @@ class ClientUI():
         self.help_menu.add_command(label="IP Info", command=self.ip_info)
         self.help_menu.add_command(
             label="Terms and Conditions",
-            command=lambda: self.text_window("Terms and Conditions", "Terms and Conditions.txt")
+            command=lambda: self.text_window(
+                "Terms and Conditions", "Terms and Conditions.txt")
         )
         self.help_menu.add_command(
             label="API Documentation",
@@ -658,7 +666,7 @@ class ClientUI():
         label.config(justify="left")
         server_info = self.master.server.getpeername()
         label["text"] = "\n".join((
-            f"Local IP: {self.master.localIP}, Port: {self.master.port}",
+            f"Local IP: {self.master.local_ip}, Port: {self.master.port}",
             f"Server IP: {server_info[0]}, Port: {server_info[1]}"
         ))
         label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
@@ -773,8 +781,10 @@ class ClientUI():
         self.lb_names = tk.Listbox(self.leaderboard)
         self.lb_coins = tk.Listbox(self.leaderboard)
         for x in [self.lb_ranks, self.lb_names, self.lb_coins]:
-            x.config(width=20, height=20, font=self.font,
-                     relief="solid", bd=0, highlightthickness=0, fg="#000000")
+            x.config(
+                width=20, height=20, font=self.font,
+                relief="solid", bd=0, highlightthickness=0, fg="#000000"
+            )
 
         self.lb_ranks.grid(row=0, column=0, padx=(
             10, 10), pady=5, sticky="news")
@@ -787,10 +797,8 @@ class ClientUI():
         self.lb_ranks.insert(0, "Rank")
         self.lb_names.insert(0, "User")
         self.lb_coins.insert(0, "Coins")
-
-        self.lb_ranks.config(state="disabled")
-        self.lb_names.config(state="disabled")
-        self.lb_coins.config(state="disabled")
+        for i in (self.lb_ranks, self.lb_names, self.lb_coins):
+            i.config(state="disabled")
         self.master.send("/requestLeaderboard")
 
     def update_leaderboard(self, raw_str):
@@ -804,21 +812,17 @@ class ClientUI():
             i.split(",")
             for i in raw_str.split(" ")
         ]
-
-        self.lb_ranks.config(state="normal")
-        self.lb_names.config(state="normal")
-        self.lb_coins.config(state="normal")
-        self.lb_ranks.delete(1, "end")
-        self.lb_names.delete(1, "end")
-        self.lb_coins.delete(1, "end")
+        for i in (self.lb_ranks, self.lb_names, self.lb_coins):
+            i.config(state="normal")
+            i.delete(1, "end")
 
         for i in range(len(info)):
             self.lb_ranks.insert("end", i + 1)
             self.lb_names.insert("end", info[i][0])
             self.lb_coins.insert("end", info[i][1])
-        self.lb_ranks.config(state="disabled")
-        self.lb_names.config(state="disabled")
-        self.lb_coins.config(state="disabled")
+
+        for i in (self.lb_ranks, self.lb_names, self.lb_coins):
+            i.config(state="disabled")
 
     def del_account(self):
         """
@@ -927,7 +931,6 @@ class Spinbox(ttk.Entry):
     """Just in case. :)"""
 
     def __init__(self, master=None, **kw):
-
         ttk.Entry.__init__(self, master, "ttk::spinbox", **kw)
 
     def set(self, value):

@@ -49,7 +49,7 @@ There are also security features for this chatroom. Obviously, one needs to know
 
 1. Usernames may not contain any of these characters: `<> |.:;,!?()[]{}@#\%*/\\~='"`.
 2. Duplicate usernames are not allowed.
-3. Usernames may not be any of these keywords: "version", "keychars", "publicKey", "privateKey", "registeredIPs", "admins", or "users".
+3. Usernames may not be any of these keywords: "version", "keychars", "public_key", "private_key", "registeredIPs", "admins", or "users".
 
 One account per IP is our rule; we don't want people spamming accounts with one computer. The benefit of this system is that you get to log in on different computers while retaining the same username; also, you get to choose your username instead of having it forced upon you.
 

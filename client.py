@@ -68,22 +68,22 @@ class Client(tk.Tk):
 
         print("Generating encryption keys...")
         keys = rsa.newkeys(256)
-        self.publicKey = keys[0]
-        self.privateKey = keys[1]
+        self.public_key = keys[0]
+        self.private_key = keys[1]
 
         # Attributes.
         self.port = port
         self.ui = clientUI.ClientUI(self)
         self.username = ""
         self.dead = False
-        self.keyLength = 16
-        self.rsaKeyLength = 32
+        self.key_length = 16
+        self.rsa_key_length = 32
 
         # Socket stuff.
         self.pingTime = time.time()
         self.delay = 0
         self.port = port
-        self.localIP = socket.gethostbyname(socket.gethostname())
+        self.local_ip = socket.gethostbyname(socket.gethostname())
         self.server = socket.socket()
 
         # Terms and conditions stuff!
@@ -111,8 +111,8 @@ class Client(tk.Tk):
         info = self.decrypt(info[:-5]).split("\n")
         self.data["money"] = int(info[0])
         self.data["cookies"] = int(info[1])
-        self.prevHash = info[2]
-        self.hashZeroes = int(info[3])
+        self.prev_hash = info[2]
+        self.hash_zeros = int(info[3])
         self.server.send(b" ")
 
         # Mine away!
@@ -138,7 +138,7 @@ class Client(tk.Tk):
                 continue
 
             for message in message.split(b"\n" * 5):
-                if len(message) < self.rsaKeyLength + 1:
+                if len(message) < self.rsa_key_length + 1:
                     continue
 
                 # Decryption try/catch.
@@ -147,9 +147,7 @@ class Client(tk.Tk):
                     continue
 
                 # Yoy! Message processing.
-                messages = message.split("\n")
-
-                for line in messages:
+                for line in message.split("\n"):
                     print(line)
                     if ">" in line:
                         # Lines with usernames may still contain messages.
@@ -183,7 +181,7 @@ class Client(tk.Tk):
 
                             # New hash for the blockchain!
                             elif commands[0] == "/newHash":
-                                self.prevHash = commands[1]
+                                self.prev_hash = commands[1]
 
                             elif commands[0] == "/update_leaderboard":
                                 self.ui.update_leaderboard(
@@ -218,7 +216,7 @@ class Client(tk.Tk):
             self.pingTime = time.time()
 
         try:
-            key = os.urandom(self.keyLength)
+            key = os.urandom(self.key_length)
             aes = pyaes.AESModeOfOperationCTR(key)
             aes_key = rsa.encrypt(key, self.server_key)
             key_and_message = aes_key + aes.encrypt(message)
@@ -264,7 +262,7 @@ class Client(tk.Tk):
             self.ui.configure_title(
                 "Failed to connect. Please check your IP. ", self.ui.title)
             # self.ui.configure_cursor("")
-        credentials = f"{self.publicKey.n}\n{self.publicKey.e}\n"
+        credentials = f"{self.public_key.n}\n{self.public_key.e}\n"
         credentials += f"{username}\n"
         credentials += f"{hashlib.sha512((password + username).encode()).hexdigest()}\nnewacc"
         self.server.send(credentials.encode())
@@ -316,8 +314,8 @@ class Client(tk.Tk):
         # self.ui.configure_cursor("wait")
         try:
             self.server.connect((self.ui.entries[0].get(), self.port))
-            pk1 = self.publicKey.n
-            pk2 = self.publicKey.e
+            pk1 = self.public_key.n
+            pk2 = self.public_key.e
             username = self.ui.entries[1].get()
             password = hashlib.sha512(
                 (self.ui.entries[2].get() + username).encode()).hexdigest()
@@ -363,9 +361,9 @@ class Client(tk.Tk):
         We use standard a symmetric CTR AES cipher with the key encrypted using RSA.
         """
         try:
-            key = rsa.decrypt(message[:self.rsaKeyLength], self.privateKey)
+            key = rsa.decrypt(message[:self.rsa_key_length], self.private_key)
             aes = pyaes.AESModeOfOperationCTR(key)
-            return aes.decrypt(message[self.rsaKeyLength:]).decode()
+            return aes.decrypt(message[self.rsa_key_length:]).decode()
 
         except:
             print(f"Could not decrypt: {message}")

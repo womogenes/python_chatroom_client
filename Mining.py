@@ -12,9 +12,9 @@ HOW THIS WORKS
         a given number of zeroes, you earn 5 coins. This <string>
         must be 86 characters long.
 
-    This previous hash is stored in "client.prevHash".
+    This previous hash is stored in "client.prev_hash".
         This variable changes as people mine and earn money.
-    The given number of zeroes is stored in "client.hashZeroes".
+    The given number of zeroes is stored in "client.hash_zeros".
         This variable may or may not change.
 
     The protocol for sending hashes is
