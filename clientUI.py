@@ -60,7 +60,7 @@ class ClientUI():
         self.accMenu = None
 
         self.style = ttk.Style()
-        self.style.theme_use('vista')
+        # self.style.theme_use('vista')
         self.configure_style()
         
         # ctypes hacking?
@@ -71,7 +71,7 @@ class ClientUI():
             print(self.masterID)
 
         # Master attributes.
-        self.master.iconbitmap(self.iconDir)
+        # self.master.iconbitmap(self.iconDir)
         self.master.resizable(True, True)
         self.master['bg'] = 'white'
         self.master.protocol('WM_DELETE_WINDOW', lambda event = None: _thread.start_new(self.on_closing, ()))
@@ -226,7 +226,7 @@ class ClientUI():
             nfWin.resizable(False, False)
             nfWin.title(self.master.title() + ' Notification')
             nfWin.protocol('WM_DELETE_WINDOW', lambda: self.close_notification(nfWin))
-            nfWin.iconbitmap(self.iconDir)
+            # nfWin.iconbitmap(self.iconDir)
             nfWin.config(bg = self.bg)
             description = ttk.Label(nfWin, text = 'You have a new message: ')
             if whisper:
@@ -469,7 +469,7 @@ class ClientUI():
         self.cfwin.transient(self.master)
         self.cfwin.resizable(False, False)
         self.cfwin.title('Choose the font size')
-        self.cfwin.iconbitmap(self.iconDir)
+        # self.cfwin.iconbitmap(self.iconDir)
         self.cfwin.config(bg = self.bg)
         self.spinbox = Spinbox(self.cfwin, width = 10, from_ = 1, to_ = 72, wrap = True, font = self.sFont)
         self.spinbox.set(self.font[1])
@@ -582,7 +582,7 @@ class ClientUI():
         self.toplevels.add(ipInfoWin)
         ipInfoWin.transient(self.master)
         ipInfoWin.title(ipInfoWin.title() + ' IP Info')
-        ipInfoWin.iconbitmap(self.iconDir)
+        # ipInfoWin.iconbitmap(self.iconDir)
         ipInfoWin.grid_rowconfigure(0, weight = 1)
         ipInfoWin.grid_columnconfigure(0, weight = 1)
         closeButton = ttk.Button(ipInfoWin, text = 'Close', command = ipInfoWin.destroy)
@@ -633,7 +633,7 @@ class ClientUI():
         '''
         win = tk.Toplevel()
         self.toplevels.add(win)
-        win.iconbitmap(self.iconDir)
+        # win.iconbitmap(self.iconDir)
         win.transient(self.master)
         win.config(bg = self.bg)
         win.grid_rowconfigure(0, weight = 1)
@@ -686,7 +686,7 @@ class ClientUI():
         self.toplevels.add(self.leaderboard)
         self.leaderboard.transient(self.master)
         self.leaderboard.title('Mining Leaderboard')
-        self.leaderboard.iconbitmap(self.iconDir)
+        # self.leaderboard.iconbitmap(self.iconDir)
         self.leaderboard.grid_rowconfigure(0, weight = 1)
         self.leaderboard.grid_columnconfigure(0, weight = 2)
         self.leaderboard.grid_columnconfigure(1, weight = 3)
@@ -768,7 +768,7 @@ class ClientUI():
         self.dawin.config(bg = self.bg)
         self.dawin.grid_columnconfigure(2, weight = 1)
         
-        self.dawin.iconbitmap(self.iconDir)
+        # self.dawin.iconbitmap(self.iconDir)
         self.daTitle = tk.Label(self.dawin, text = 'To confirm deletion, please enter your password below. ', font = self.font, fg = self.fg, bg = self.bg)
         self.daPassEntry = ttk.Entry(self.dawin, width = 50, font = self.font)
         self.daPassEntry.config(show = '•')
@@ -812,7 +812,7 @@ class ClientUI():
         self.cpwin.config(bg = self.bg)
         self.cpwin.grid_columnconfigure(2, weight = 1)
         
-        self.cpwin.iconbitmap(self.iconDir)
+        # self.cpwin.iconbitmap(self.iconDir)
         self.cpTitle = tk.Label(self.cpwin, text = 'To change your password, please enter your info below. ', font = self.font, fg = self.fg, bg = self.bg)
         self.cpPassEntry = ttk.Entry(self.cpwin, width = 50, font = self.font, show = '•')
         self.cpNewPassEntry = ttk.Entry(self.cpwin, width = 50, font = self.font, show = '•')

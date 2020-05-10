@@ -1,1 +1,0 @@
-{"version": "v5.0.5", "agreedToTaC": true, "fontSize": 10, "notifications": false, "loginInfo": ["10.0.0.155", "Bill9000", "tendency628318"], "money": 0, "cookies": 0}

@@ -21,12 +21,12 @@
 #       client.send("/mine " + <string>, False). 
 #   You should check your hashes with the following function: 
 #          hashlib.sha512(<string>).hexdigest() 
-#       to check if it contains an adequate amount of leading zeroes 
-#       before you send it off to the server. The server is not 
-#       meant to be a checking service. DO NOT SPAM THE SERVER. 
-# 
+#       to check if it contains an adequate amount of leading zeroes
+#       before you send it off to the server. The server is not
+#       meant to be a checking service. DO NOT SPAM THE SERVER.
+#
 #   The following function will be executed as a thread every time 
-#       you log on. Edit it for mining. You can use any libraries 
+#       you log on. Edit it for mining. You can use any libraries
 #       you like or not use any libraries, but you are not allowed 
 #       to spam the server. 
 #       (Some coding experience is required.) 
