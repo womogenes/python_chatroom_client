@@ -11,13 +11,15 @@ import _thread
 import sys
 import os
 import time
+import tkinter as tk
+from datetime import datetime
 
 # Encryption libraries.=
 import rsa
 import pyaes
 
 # ExTeRnAl ImPoRtS!?
-from clientUI import *
+import clientUI
 import Mining
 
 
@@ -71,7 +73,7 @@ class Client(tk.Tk):
 
         # Attributes.
         self.port = port
-        self.ui = ClientUI(self)
+        self.ui = clientUI.ClientUI(self)
         self.username = ""
         self.dead = False
         self.keyLength = 16
@@ -103,7 +105,7 @@ class Client(tk.Tk):
         Handles all requests and puts requests in.
         """
         # Send a welcome message!
-        self.send(f"{self.username} is in at {str(dt.now())[:-6]}")
+        self.send(f"{self.username} is in at {str(datetime.now())[:-6]}")
         # Get all info.
         info = self.server.recv(2048)
         info = self.decrypt(info[:-5]).split("\n")
@@ -131,7 +133,7 @@ class Client(tk.Tk):
 
             except:
                 print(
-                    f"Sorry, the server has broken down at {str(dt.now())[:-6]}")
+                    f"Sorry, the server has broken down at {str(datetime.now())[:-6]}")
                 self.dead = True
                 continue
 
@@ -330,7 +332,7 @@ class Client(tk.Tk):
             return
 
         print(
-            f"Attempting login at server with IP {self.ui.entries[0].get()}, {str(dt.now())[:-7]}", end="... ")
+            f"Attempting login at server with IP {self.ui.entries[0].get()}, {str(datetime.now())[:-7]}", end="... ")
         # self.ui.configure_cursor("wait")
         self.username = username
 
@@ -389,5 +391,5 @@ if "idlelib" in sys.modules:
 else:
     client = Client(1235)
     client.server.close()
-    print(f"\nProgram terminated at {str(dt.now())[:-6]}")
+    print(f"\nProgram terminated at {str(datetime.now())[:-6]}")
     sys.exit()

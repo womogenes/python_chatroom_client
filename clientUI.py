@@ -1,21 +1,18 @@
-
-# Python ChatRoom Client
-#   ClientUI.py
-# v5.0.4, November 2019
+"""
+Python ChatRoom Client
+    ClientUI.py
+v5.0.4, November 2019
+"""
 
 # Agh, imports.
 import ctypes
-import sys
-import _thread
-
+import datetime
 import hashlib
-
-from datetime import datetime as dt
-
+import sys
 import tkinter as tk
 import tkinter.ttk as ttk
-import tkinter.messagebox as messagebox
-import tkinter.colorchooser as colorchooser
+
+import _thread
 
 
 class ClientUI():
@@ -218,32 +215,25 @@ class ClientUI():
             self.chat_boxes[title][1].insert("end", substance)
 
         self.chat_boxes[title][0].insert("end", username)
-        self.chat_boxes[title][2].insert("end", str(dt.now()))
+        self.chat_boxes[title][2].insert("end", str(datetime.datetime.now()))
 
         # Based on settings, see the end.
         if autoscroll:
             for i in range(3):
-                self.chat_boxes[self.chats.tab(
-                    self.chats.select(), "text")][i].see("end")
+                self.chat_boxes[self.chats.tab(self.chats.select(), "text")][i].see("end")
 
         # coloring!
         if whisper and username != self.master.username:
-            self.chat_boxes[title][0].itemconfig(
-                "end", {"fg": self.whisper_color})
-            self.chat_boxes[title][1].itemconfig(
-                "end", {"fg": self.whisper_color})
+            for i in (0, 1):
+                self.chat_boxes[title][i].itemconfig("end", {"fg": self.whisper_color})
 
         elif error:
-            self.chat_boxes[title][0].itemconfig(
-                "end", {"fg": self.error_color})
-            self.chat_boxes[title][1].itemconfig(
-                "end", {"fg": self.error_color})
+            for i in (0, 1):
+                self.chat_boxes[title][i].itemconfig("end", {"fg": self.error_color})
 
         if username == self.master.username:
-            self.chat_boxes[title][0].itemconfig(
-                "end", {"fg": self.personal_color})
-            self.chat_boxes[title][1].itemconfig(
-                "end", {"fg": self.personal_color})
+            for i in (0, 1):
+                self.chat_boxes[title][i].itemconfig("end", {"fg": self.personal_color})
 
         # After that, raise notifications if necessary.
         if self.master.focus_get() is None and self.notifications.get() == 1 and not self.notified:
@@ -264,18 +254,18 @@ class ClientUI():
                 label = tk.Label(
                     nf_win, bg=self.bg, text=f"{username}> {substance[3:]}", font=self.font
                 )
-                label.config(
-                    fg=self.whisper_color if whisper else self.error_color)
+                label.config(fg=self.whisper_color if whisper else self.error_color)
             else:
                 label = tk.Label(
                     nf_win, bg=self.bg, text=f"{username}> {substance}", font=self.font)
 
-            description.grid(row=0, column=0, padx=20,
-                             pady=(20, 0), sticky="w")
+            description.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="w")
             label.grid(row=1, column=0, padx=20, sticky="w")
 
             close_button = ttk.Button(
-                nf_win, text="Dismiss", command=lambda: self.close_notification(nf_win))
+                nf_win, text="Dismiss",
+                command=lambda: self.close_notification(nf_win)
+            )
             close_button.grid(row=2, column=0, pady=5)
 
     def register(self, event=None):
@@ -291,8 +281,10 @@ class ClientUI():
         self.button["text"] = "Back"
         self.button.configure(command=self.configure_login)
         self.button.grid(row=5, column=2)
-        self.master.bind("<Return>", lambda event=None: _thread.start_new(
-            self.master.make_account, ()))
+        self.master.bind(
+            "<Return>",
+            lambda event=None: _thread.start_new(self.master.make_account, ())
+        )
 
         self.entries[0].focus_set()
         self.entries.append(ttk.Entry(
@@ -301,8 +293,7 @@ class ClientUI():
         ))
         self.labels.append(ttk.Label(self.master, text="Confirm Password: "))
         self.entries[3].grid(row=4, column=2, columnspan=3)
-        self.labels[3].grid(row=4, column=0, padx=5,
-                            pady=5, columnspan=2, sticky="e")
+        self.labels[3].grid(row=4, column=0, padx=5, pady=5, columnspan=2, sticky="e")
 
         # Now make the proper stuff.
         self.r_button["text"] = "Create New Account"
@@ -374,8 +365,7 @@ class ClientUI():
         self.help_menu.add_command(label="IP Info", command=self.ip_info)
         self.help_menu.add_command(
             label="Terms and Conditions",
-            command=lambda: self.text_window(
-                "Terms and Conditions", "Terms and Conditions.txt")
+            command=lambda: self.text_window("Terms and Conditions", "Terms and Conditions.txt")
         )
         self.help_menu.add_command(
             label="API Documentation",
@@ -388,17 +378,17 @@ class ClientUI():
             label="Leaderboard", command=self.create_leaderboard)
         self.menubar.add_cascade(label="Statistics", menu=self.stats_menu)
 
-        # TODO: get rid of duplication
-        self.options_menu.add_command(
-            label="Edit Whisper color", command=lambda: self.edit_color("whisper"))
-        self.options_menu.add_command(
-            label="Edit Error color", command=lambda: self.edit_color("error"))
-        self.options_menu.add_command(
-            label="Edit Personal color", command=lambda: self.edit_color("personal"))
+        for color_name in ("whisper", "error", "personal"):
+            self.options_menu.add_command(
+                label=f"Edit {color_name.title()} color",
+                command=lambda: self.edit_color(color_name)
+            )
 
         self.options_menu.add_separator()
         self.options_menu.add_checkbutton(
-            label="Notifications", variable=self.notifications, command=self.configure_notifications)
+            label="Notifications", variable=self.notifications,
+            command=self.configure_notification
+        )
 
         self.acc_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
         self.acc_menu.add_command(
@@ -424,10 +414,12 @@ class ClientUI():
             self.master.username
         )
 
-        self.chats.grid(row=2, column=0, padx=5, pady=5,
-                        columnspan=2, sticky="new")
-        self.entry.grid(row=3, column=1, padx=(0, 5),
-                        pady=5, columnspan=2, sticky="swe")
+        self.chats.grid(
+            ow=2, column=0, padx=5, pady=5, columnspan=2, sticky="new"
+        )
+        self.entry.grid(
+            row=3, column=1, padx=(0, 5), pady=5, columnspan=2, sticky="swe"
+        )
         ttk.Label(
             self.master, text=f"{self.master.username}>"
         ).grid(row=3, column=0, padx=(5, 0), pady=5)
@@ -442,8 +434,9 @@ class ClientUI():
         """
         self.style.configure(".", foreground=self.fg, background=self.bg)
         self.style.configure("TCheckbutton", font=self.font)
-        self.style.configure("TLabel", foreground=self.fg,
-                             background=self.bg, font=self.font)
+        self.style.configure(
+            "TLabel", foreground=self.fg, background=self.bg, font=self.font
+        )
         self.style.configure("TButton", font=self.s_font)
         self.style.configure("TNotebook.Tab", font=self.s_font)
         self.style.configure("TSpinbox", font=self.s_font)
@@ -586,7 +579,7 @@ class ClientUI():
         self.on_closing()
         This is the protocol for when the "x" button is pressed.
         """
-        if messagebox.askyesno(
+        if tk.messagebox.askyesno(
             f"Python Chatroom {self.master.data['version']}",
             "Are you sure you want to exit? "
         ):
@@ -626,13 +619,13 @@ class ClientUI():
         """
         # TODO: remove duplication
         if color == "whisper":
-            self.whisper_color = colorchooser.askcolor(
+            self.whisper_color = tk.colorchooser.askcolor(
                 parent=self.master, title="Choose color of Whispers")[1]
         elif color == "error":
-            self.error_color = colorchooser.askcolor(
+            self.error_color = tk.colorchooser.askcolor(
                 parent=self.master, title="Choose color of Errors")[1]
         elif color == "personal":
-            self.personal_color = colorchooser.askcolor(
+            self.personal_color = tk.colorchooser.askcolor(
                 parent=self.master, title="Choose Your Personal color")[1]
 
     def close_notification(self, notification_window):
