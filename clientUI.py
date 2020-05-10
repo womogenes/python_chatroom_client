@@ -38,9 +38,9 @@ class ClientUI():
         self.b_font = (self.font[0], self.font[1] + 5)
         self.icon_dir = "pyva.ico"
         self.prefix = ""
-        self.whispercolor = "#0051FF"
-        self.errorcolor = "#FF0000"
-        self.personalcolor = "#33A314"
+        self.whisper_color = "#0051FF"
+        self.error_color = "#FF0000"
+        self.personal_color = "#33A314"
         self.bg = "#FFFFFF"
         self.fg = "#000000"
         self.save_pass = tk.IntVar()
@@ -48,16 +48,16 @@ class ClientUI():
         self.notifications = tk.IntVar()
         self.notifications.set(int(self.master.data["notifications"]))
         self.notified = False
-        self.toplevels = set()
+        self.top_levels = set()
 
         # Set up widget attributes.
-        self.daTitle = None
-        self.cpTitle = None
-        self.fileMenu = None
-        self.helpMenu = None
-        self.statsMenu = None
-        self.optionsMenu = None
-        self.accMenu = None
+        self.da_title = None
+        self.cp_title = None
+        self.file_menu = None
+        self.help_menu = None
+        self.stats_menu = None
+        self.options_menu = None
+        self.acc_menu = None
 
         self.style = ttk.Style()
         # self.style.theme_use("vista")
@@ -67,8 +67,8 @@ class ClientUI():
         if "win" in sys.platform:
             ctypes.windll.shcore.SetProcessDpiAwareness(2)
             self.user32 = ctypes.WinDLL("user32", use_last_error=True)
-            self.masterID = self.user32.GetForegroundWindow()
-            print(self.masterID)
+            self.master_id = self.user32.GetForegroundWindow()
+            print(self.master_id)
 
         # Master attributes.
         # self.master.iconbitmap(self.icon_dir)
@@ -109,14 +109,14 @@ class ClientUI():
         self.menubar = tk.Menu(self.master, relief="sunken")
         self.master.config(menu=self.menubar)
 
-        self.fileMenu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
-        self.fileMenu.add_command(label="Exit (Esc)", command=self.on_closing)
-        self.menubar.add_cascade(label="File", menu=self.fileMenu)
+        self.file_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
+        self.file_menu.add_command(label="Exit (Esc)", command=self.on_closing)
+        self.menubar.add_cascade(label="File", menu=self.file_menu)
 
-        self.optionsMenu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
-        self.optionsMenu.add_command(
+        self.options_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
+        self.options_menu.add_command(
             label="Change Font Size", command=self.configure_font)
-        self.menubar.add_cascade(label="Options", menu=self.optionsMenu)
+        self.menubar.add_cascade(label="Options", menu=self.options_menu)
         self.title = tk.Label(
             self.master, bg=self.bg, width=50,
             text="Log in to the Chatroom", justify="center", font=self.font
@@ -125,10 +125,10 @@ class ClientUI():
             self.master, text="Log In",
             command=lambda event=None: _thread.start_new(self.master.login, ())
         )
-        self.rButton = ttk.Button(
+        self.r_button = ttk.Button(
             self.master, width=20, text="Register New Account", command=self.register
         )
-        self.savePassCB = ttk.Checkbutton(
+        self.save_pass_cb = ttk.Checkbutton(
             self.master, text="Remember Me", variable=self.save_pass
         )
 
@@ -156,8 +156,8 @@ class ClientUI():
             self.entries[i].insert(0, info[i])
 
         self.button.grid(row=4, column=2, padx=5, pady=5, sticky="w")
-        self.rButton.grid(row=4, column=4, padx=5, pady=5, sticky="e")
-        self.savePassCB.grid(row=4, column=3, padx=5, pady=5, sticky="w")
+        self.r_button.grid(row=4, column=4, padx=5, pady=5, sticky="e")
+        self.save_pass_cb.grid(row=4, column=3, padx=5, pady=5, sticky="w")
         self.title.grid(
             row=0, column=1, padx=10, pady=10, columnspan=4, sticky="ew"
         )
@@ -191,12 +191,12 @@ class ClientUI():
                 # Otherwise, somebody else has whispered to us.
                 title = username
 
-            if title not in self.chatBoxes and username != "Server":
+            if title not in self.chat_boxes and username != "Server":
                 self.new_chat(title)
                 self.insert(
                     f"Server> This is your private chat with {title}. ", title)
                 # Put the appropriate tab into focus.
-                self.chats.select(self.chatFrames[title])
+                self.chats.select(self.chat_frames[title])
             if username == "Server":
                 title = "Lobby"
 
@@ -205,76 +205,78 @@ class ClientUI():
 
         if substance.startswith("/e ") and username == "Server":
             error = True
-            title = self.chats.tab(self.chatFrames[title], "text")
-            self.chats.select(self.chatFrames["Lobby"])
+            title = self.chats.tab(self.chat_frames[title], "text")
+            self.chats.select(self.chat_frames["Lobby"])
 
         autoscroll = self.scrollbars[self.chats.tab(
             self.chats.select(), "text")].get()[1] == 1
 
         # Insert text into the listboxes.
         if whisper or error:
-            self.chatBoxes[title][1].insert("end", substance[3:])
+            self.chat_boxes[title][1].insert("end", substance[3:])
         else:
-            self.chatBoxes[title][1].insert("end", substance)
+            self.chat_boxes[title][1].insert("end", substance)
 
-        self.chatBoxes[title][0].insert("end", username)
-        self.chatBoxes[title][2].insert("end", str(dt.now()))
+        self.chat_boxes[title][0].insert("end", username)
+        self.chat_boxes[title][2].insert("end", str(dt.now()))
 
         # Based on settings, see the end.
         if autoscroll:
             for i in range(3):
-                self.chatBoxes[self.chats.tab(
+                self.chat_boxes[self.chats.tab(
                     self.chats.select(), "text")][i].see("end")
 
         # coloring!
         if whisper and username != self.master.username:
-            self.chatBoxes[title][0].itemconfig(
-                "end", {"fg": self.whispercolor})
-            self.chatBoxes[title][1].itemconfig(
-                "end", {"fg": self.whispercolor})
+            self.chat_boxes[title][0].itemconfig(
+                "end", {"fg": self.whisper_color})
+            self.chat_boxes[title][1].itemconfig(
+                "end", {"fg": self.whisper_color})
 
         elif error:
-            self.chatBoxes[title][0].itemconfig("end", {"fg": self.errorcolor})
-            self.chatBoxes[title][1].itemconfig("end", {"fg": self.errorcolor})
+            self.chat_boxes[title][0].itemconfig(
+                "end", {"fg": self.error_color})
+            self.chat_boxes[title][1].itemconfig(
+                "end", {"fg": self.error_color})
 
         if username == self.master.username:
-            self.chatBoxes[title][0].itemconfig(
-                "end", {"fg": self.personalcolor})
-            self.chatBoxes[title][1].itemconfig(
-                "end", {"fg": self.personalcolor})
+            self.chat_boxes[title][0].itemconfig(
+                "end", {"fg": self.personal_color})
+            self.chat_boxes[title][1].itemconfig(
+                "end", {"fg": self.personal_color})
 
         # After that, raise notifications if necessary.
         if self.master.focus_get() is None and self.notifications.get() == 1 and not self.notified:
             self.notified = True
-            nfWin = tk.Toplevel(self.master)
-            self.toplevels.add(nfWin)
-            nfWin.attributes("-topmost", True)
-            nfWin.resizable(False, False)
-            nfWin.title(self.master.title() + " Notification")
-            nfWin.protocol(
+            nf_win = tk.Toplevel(self.master)
+            self.top_levels.add(nf_win)
+            nf_win.attributes("-topmost", True)
+            nf_win.resizable(False, False)
+            nf_win.title(self.master.title() + " Notification")
+            nf_win.protocol(
                 "WM_DELETE_WINDOW",
-                lambda: self.close_notification(nfWin)
+                lambda: self.close_notification(nf_win)
             )
-            # nfWin.iconbitmap(self.icon_dir)
-            nfWin.config(bg=self.bg)
-            description = ttk.Label(nfWin, text="You have a new message: ")
+            # nf_win.iconbitmap(self.icon_dir)
+            nf_win.config(bg=self.bg)
+            description = ttk.Label(nf_win, text="You have a new message: ")
             if whisper or error:
                 label = tk.Label(
-                    nfWin, bg=self.bg, text=f"{username}> {substance[3:]}", font=self.font
+                    nf_win, bg=self.bg, text=f"{username}> {substance[3:]}", font=self.font
                 )
                 label.config(
-                    fg=self.whispercolor if whisper else self.errorcolor)
+                    fg=self.whisper_color if whisper else self.error_color)
             else:
                 label = tk.Label(
-                    nfWin, bg=self.bg, text=f"{username}> {substance}", font=self.font)
+                    nf_win, bg=self.bg, text=f"{username}> {substance}", font=self.font)
 
             description.grid(row=0, column=0, padx=20,
                              pady=(20, 0), sticky="w")
             label.grid(row=1, column=0, padx=20, sticky="w")
 
-            closeButton = ttk.Button(
-                nfWin, text="Dismiss", command=lambda: self.close_notification(nfWin))
-            closeButton.grid(row=2, column=0, pady=5)
+            close_button = ttk.Button(
+                nf_win, text="Dismiss", command=lambda: self.close_notification(nf_win))
+            close_button.grid(row=2, column=0, pady=5)
 
     def register(self, event=None):
         """
@@ -303,10 +305,10 @@ class ClientUI():
                             pady=5, columnspan=2, sticky="e")
 
         # Now make the proper stuff.
-        self.rButton["text"] = "Create New Account"
-        self.rButton.configure(command=lambda event=None: _thread.start_new(
+        self.r_button["text"] = "Create New Account"
+        self.r_button.configure(command=lambda event=None: _thread.start_new(
             self.master.make_account, ()))
-        self.rButton.grid(
+        self.r_button.grid(
             row=5, column=2, padx=5, pady=5, columnspan=2, sticky="e"
         )
 
@@ -316,31 +318,32 @@ class ClientUI():
         Makes a new chat within the chatroom system.
         We add Lobby first.
         """
-        self.chatFrames[title] = tk.Frame(
+        self.chat_frames[title] = tk.Frame(
             self.chats, bg=self.bg, width=100, height=60)
-        self.chatFrames[title].columnconfigure(0, weight=0)
-        self.chatFrames[title].columnconfigure(1, weight=1)
-        self.chatFrames[title].columnconfigure(2, weight=0)
+        self.chat_frames[title].columnconfigure(0, weight=0)
+        self.chat_frames[title].columnconfigure(1, weight=1)
+        self.chat_frames[title].columnconfigure(2, weight=0)
         self.scrollbars[title] = tk.Scrollbar(
-            self.chatFrames[title], command=lambda *args: self.onvsb(*args, title=title))
+            self.chat_frames[title], command=lambda *args: self.onvsb(*args, title=title))
 
-        self.chatBoxes[title] = []
+        self.chat_boxes[title] = []
         widths = [20, 60, 30]
         for i in range(3):
-            self.chatBoxes[title].append(tk.Listbox(
-                self.chatFrames[title], width=widths[i], height=20, font=self.font, relief="flat"))
-            self.chatBoxes[title][i].configure(
+            self.chat_boxes[title].append(tk.Listbox(
+                self.chat_frames[title], width=widths[i], height=20, font=self.font, relief="flat"))
+            self.chat_boxes[title][i].configure(
                 bd=0, fg=self.fg, highlightthickness=0, selectmode="browse")
-            self.chatBoxes[title][i].configure(
+            self.chat_boxes[title][i].configure(
                 yscrollcommand=self.scrollbars[title].set)
-            self.chatBoxes[title][i].bind(
+            self.chat_boxes[title][i].bind(
                 "<MouseWheel>", lambda event: self.mouse_wheel(event, title))
-            self.chatBoxes[title][i].grid(row=0, column=i, padx=5, sticky="we")
-        self.chatBoxes[title][2].configure(justify="right")
+            self.chat_boxes[title][i].grid(
+                row=0, column=i, padx=5, sticky="we")
+        self.chat_boxes[title][2].configure(justify="right")
 
         self.scrollbars[title].grid(row=0, column=3, sticky="ns")
-        self.chatFrames[title].grid()
-        self.chats.add(self.chatFrames[title], text=title)
+        self.chat_frames[title].grid()
+        self.chats.add(self.chat_frames[title], text=title)
 
     def configure_chatroom(self):
         """
@@ -367,47 +370,47 @@ class ClientUI():
         self.master.resizable(True, True)
 
         # Add new menu stuff!
-        self.helpMenu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
-        self.helpMenu.add_command(label="IP Info", command=self.ip_info)
-        self.helpMenu.add_command(
+        self.help_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
+        self.help_menu.add_command(label="IP Info", command=self.ip_info)
+        self.help_menu.add_command(
             label="Terms and Conditions",
             command=lambda: self.text_window(
                 "Terms and Conditions", "Terms and Conditions.txt")
         )
-        self.helpMenu.add_command(
+        self.help_menu.add_command(
             label="API Documentation",
             command=lambda: self.text_window("API Documentation", "api.txt")
         )
-        self.menubar.add_cascade(label="Help", menu=self.helpMenu)
+        self.menubar.add_cascade(label="Help", menu=self.help_menu)
 
-        self.statsMenu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
-        self.statsMenu.add_command(
+        self.stats_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
+        self.stats_menu.add_command(
             label="Leaderboard", command=self.create_leaderboard)
-        self.menubar.add_cascade(label="Statistics", menu=self.statsMenu)
+        self.menubar.add_cascade(label="Statistics", menu=self.stats_menu)
 
         # TODO: get rid of duplication
-        self.optionsMenu.add_command(
+        self.options_menu.add_command(
             label="Edit Whisper color", command=lambda: self.edit_color("whisper"))
-        self.optionsMenu.add_command(
+        self.options_menu.add_command(
             label="Edit Error color", command=lambda: self.edit_color("error"))
-        self.optionsMenu.add_command(
+        self.options_menu.add_command(
             label="Edit Personal color", command=lambda: self.edit_color("personal"))
 
-        self.optionsMenu.add_separator()
-        self.optionsMenu.add_checkbutton(
+        self.options_menu.add_separator()
+        self.options_menu.add_checkbutton(
             label="Notifications", variable=self.notifications, command=self.configure_notifications)
 
-        self.accMenu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
-        self.accMenu.add_command(
+        self.acc_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
+        self.acc_menu.add_command(
             label="Delete Account", command=self.del_account)
-        self.accMenu.add_command(
+        self.acc_menu.add_command(
             label="Change Password", command=self.change_password)
-        self.menubar.add_cascade(label="Account", menu=self.accMenu)
+        self.menubar.add_cascade(label="Account", menu=self.acc_menu)
 
         # Chat management system!
         self.chats = ttk.Notebook(self.master)
-        self.chatFrames = {}
-        self.chatBoxes = {}
+        self.chat_frames = {}
+        self.chat_boxes = {}
         self.scrollbars = {}
         self.entry = ttk.Entry(self.master, width=103, font=self.font)
         self.entry.focus_set()
@@ -449,13 +452,16 @@ class ClientUI():
             if type(widget) in [ttk.Entry, tk.Listbox, tk.Label]:
                 widget.config(font=self.font)
 
-        for menu in [self.fileMenu, self.optionsMenu, self.helpMenu, self.statsMenu, self.optionsMenu, self.accMenu]:
+        for menu in (
+            self.file_menu, self.options_menu, self.help_menu,
+            self.stats_menu, self.options_menu, self.acc_menu
+        ):
             try:
                 menu.config(font=self.s_font)
             except:
                 pass
 
-        for window in self.toplevels:
+        for window in self.top_levels:
             try:
                 for widget in window.winfo_children():
                     if type(widget) in [ttk.Entry, tk.Listbox, tk.Label]:
@@ -465,10 +471,10 @@ class ClientUI():
             except:
                 self.widget.remove(widget)
 
-        if hasattr(self, "chatBoxes"):
-            for title in self.chatBoxes:
+        if hasattr(self, "chat_boxes"):
+            for title in self.chat_boxes:
                 for i in range(3):
-                    self.chatBoxes[title][i].config(font=self.font)
+                    self.chat_boxes[title][i].config(font=self.font)
 
     def configure_title(self, message, widget, color=None):
         """
@@ -476,7 +482,7 @@ class ClientUI():
         Changes the login title in given window.
         """
         if color is None:
-            color = self.errorcolor
+            color = self.error_color
 
         if True:  # try:
             widget.config(fg=color)
@@ -528,7 +534,7 @@ class ClientUI():
             self.master.save_data()
 
         self.cfwin = tk.Toplevel(self.master)
-        self.toplevels.add(self.cfwin)
+        self.top_levels.add(self.cfwin)
         self.cfwin.transient(self.master)
         self.cfwin.resizable(False, False)
         self.cfwin.title("Choose the font size")
@@ -542,9 +548,9 @@ class ClientUI():
             self.cfwin, text="Apply", command=font_apply)
         self.closebutton = ttk.Button(
             self.cfwin, text="Close", command=self.cfwin.destroy)
-        self.fontLabel = ttk.Label(self.cfwin, text="Font size: ")
+        self.font_label = ttk.Label(self.cfwin, text="Font size: ")
 
-        self.fontLabel.grid(row=1, column=0, padx=5, pady=5, sticky="ne")
+        self.font_label.grid(row=1, column=0, padx=5, pady=5, sticky="ne")
         self.spinbox.grid(row=1, column=1, padx=5, pady=5, sticky="e")
         self.applybutton.grid(row=2, column=0, padx=5, pady=5, sticky="w")
         self.closebutton.grid(row=2, column=1, padx=5, pady=5, sticky="e")
@@ -573,8 +579,7 @@ class ClientUI():
             self.master.send(self.entry.get(), True)
             return
 
-        else:
-            self.master.send(f"/w {prefix} {self.entry.get()}", True)
+        self.master.send(f"/w {prefix} {self.entry.get()}", True)
 
     def on_closing(self):
         """
@@ -601,7 +606,7 @@ class ClientUI():
         This is a necessary handle for scrolling listboxes together.
         """
         for i in range(3):
-            self.chatBoxes[title][i].yview(*args)
+            self.chat_boxes[title][i].yview(*args)
 
     def mouse_wheel(self, event, title):
         """
@@ -609,7 +614,7 @@ class ClientUI():
         Scrolls listboxes in unison.
         """
         for i in range(3):
-            self.chatBoxes[title][i].yview(
+            self.chat_boxes[title][i].yview(
                 "scroll", -event.delta // 20, "units")
 
         return "break"
@@ -621,47 +626,47 @@ class ClientUI():
         """
         # TODO: remove duplication
         if color == "whisper":
-            self.whispercolor = colorchooser.askcolor(
+            self.whisper_color = colorchooser.askcolor(
                 parent=self.master, title="Choose color of Whispers")[1]
         elif color == "error":
-            self.errorcolor = colorchooser.askcolor(
+            self.error_color = colorchooser.askcolor(
                 parent=self.master, title="Choose color of Errors")[1]
         elif color == "personal":
-            self.personalcolor = colorchooser.askcolor(
+            self.personal_color = colorchooser.askcolor(
                 parent=self.master, title="Choose Your Personal color")[1]
 
-    def close_notification(self, notificationWindow):
+    def close_notification(self, notification_window):
         """
-        ClientUI.close_notification(notificationWindow)
+        ClientUI.close_notification(notification_window)
         Stupid lambdas...can't be multi-line. :(
         Also closes the window.
         """
         self.notified = False
-        notificationWindow.destroy()
-        del notificationWindow
+        notification_window.destroy()
+        del notification_window
 
     def ip_info(self):
         """
         ClientUI.ip_info()
         Brings up a new window with ip information!
         """
-        ipInfoWin = tk.Toplevel(self.master, bg=self.bg)
-        self.toplevels.add(ipInfoWin)
-        ipInfoWin.transient(self.master)
-        ipInfoWin.title(f"{ipInfoWin.title()} IP Info")
-        # ipInfoWin.iconbitmap(self.icon_dir)
-        ipInfoWin.grid_rowconfigure(0, weight=1)
-        ipInfoWin.grid_columnconfigure(0, weight=1)
-        closeButton = ttk.Button(
-            ipInfoWin, text="Close", command=ipInfoWin.destroy)
-        closeButton.grid(row=1, column=0, pady=(0, 5))
+        ip_info_win = tk.Toplevel(self.master, bg=self.bg)
+        self.top_levels.add(ip_info_win)
+        ip_info_win.transient(self.master)
+        ip_info_win.title(f"{ip_info_win.title()} IP Info")
+        # ip_info_win.iconbitmap(self.icon_dir)
+        ip_info_win.grid_rowconfigure(0, weight=1)
+        ip_info_win.grid_columnconfigure(0, weight=1)
+        close_button = ttk.Button(
+            ip_info_win, text="Close", command=ip_info_win.destroy)
+        close_button.grid(row=1, column=0, pady=(0, 5))
 
-        label = ttk.Label(ipInfoWin)
+        label = ttk.Label(ip_info_win)
         label.config(justify="left")
-        serverInfo = self.master.server.getpeername()
+        server_info = self.master.server.getpeername()
         label["text"] = "\n".join((
             f"Local IP: {self.master.localIP}, Port: {self.master.port}",
-            f"Server IP: {serverInfo[0]}, Port: {serverInfo[1]}"
+            f"Server IP: {server_info[0]}, Port: {server_info[1]}"
         ))
         label.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
@@ -681,7 +686,7 @@ class ClientUI():
             self.master, text="I agree to these Terms and Conditions. ", variable=agree)
         next_button = ttk.Button(
             self.master, text="Continue", state="disabled",
-            command=lambda event=None: self.accept_TaC()
+            command=lambda event=None: self.accept_tac()
         )
         check_button.config(
             command=lambda: self.next_button_state(next_button, agree)
@@ -710,7 +715,7 @@ class ClientUI():
         Displays a window full of text!
         """
         win = tk.Toplevel()
-        self.toplevels.add(win)
+        self.top_levels.add(win)
         # win.iconbitmap(self.icon_dir)
         win.transient(self.master)
         win.config(bg=self.bg)
@@ -724,8 +729,8 @@ class ClientUI():
         text.configure(yscrollcommand=scrollbar.set)
         text.grid(row=0, column=0, padx=(5, 3), pady=5, sticky="nesw")
         scrollbar.grid(row=0, column=1, sticky="ns")
-        closeButton = ttk.Button(win, text="Close", command=win.destroy)
-        closeButton.grid(row=1, column=0, pady=(0, 5))
+        close_button = ttk.Button(win, text="Close", command=win.destroy)
+        close_button.grid(row=1, column=0, pady=(0, 5))
 
         f = open(file, "r")
         words = f.read()
@@ -733,9 +738,9 @@ class ClientUI():
         text.insert("end", words)
         text.config(state="disabled")
 
-    def accept_TaC(self):
+    def accept_tac(self):
         """
-        ClientUI.accept_TaC(winToDestroy)
+        ClientUI.accept_tac(winToDestroy)
         Accept the Terms and Conditions and set the variable.
         """
         self.master.data["agreedToTaC"] = True
@@ -756,7 +761,7 @@ class ClientUI():
         Create a new window for the leaderboard.
         """
         self.leaderboard = tk.Toplevel(self.master, bg=self.bg)
-        self.toplevels.add(self.leaderboard)
+        self.top_levels.add(self.leaderboard)
         self.leaderboard.transient(self.master)
         self.leaderboard.title("Mining Leaderboard")
         # self.leaderboard.iconbitmap(self.icon_dir)
@@ -764,63 +769,63 @@ class ClientUI():
         self.leaderboard.grid_columnconfigure(0, weight=2)
         self.leaderboard.grid_columnconfigure(1, weight=3)
         self.leaderboard.grid_columnconfigure(2, weight=2)
-        closeButton = ttk.Button(
+        close_button = ttk.Button(
             self.leaderboard, text="Close", command=self.leaderboard.destroy)
-        updateButton = ttk.Button(
+        update_button = ttk.Button(
             self.leaderboard, width=19, text="Update Leaderboard",
             command=lambda event=None: self.master.send("/requestLeaderboard")
         )
 
-        self.lbRanks = tk.Listbox(self.leaderboard)
-        self.lbNames = tk.Listbox(self.leaderboard)
-        self.lbCoins = tk.Listbox(self.leaderboard)
-        for x in [self.lbRanks, self.lbNames, self.lbCoins]:
+        self.lb_ranks = tk.Listbox(self.leaderboard)
+        self.lb_names = tk.Listbox(self.leaderboard)
+        self.lb_coins = tk.Listbox(self.leaderboard)
+        for x in [self.lb_ranks, self.lb_names, self.lb_coins]:
             x.config(width=20, height=20, font=self.font,
                      relief="solid", bd=0, highlightthickness=0, fg="#000000")
 
-        self.lbRanks.grid(row=0, column=0, padx=(
+        self.lb_ranks.grid(row=0, column=0, padx=(
             10, 10), pady=5, sticky="news")
-        self.lbNames.grid(row=0, column=1, pady=5, sticky="news")
-        self.lbCoins.grid(row=0, column=2, padx=(
+        self.lb_names.grid(row=0, column=1, pady=5, sticky="news")
+        self.lb_coins.grid(row=0, column=2, padx=(
             10, 10), pady=5, sticky="news")
-        closeButton.grid(row=1, column=1, pady=5, columnspan=1)
-        updateButton.grid(row=1, column=0, pady=5, columnspan=1)
+        close_button.grid(row=1, column=1, pady=5, columnspan=1)
+        update_button.grid(row=1, column=0, pady=5, columnspan=1)
 
-        self.lbRanks.insert(0, "Rank")
-        self.lbNames.insert(0, "User")
-        self.lbCoins.insert(0, "Coins")
+        self.lb_ranks.insert(0, "Rank")
+        self.lb_names.insert(0, "User")
+        self.lb_coins.insert(0, "Coins")
 
-        self.lbRanks.config(state="disabled")
-        self.lbNames.config(state="disabled")
-        self.lbCoins.config(state="disabled")
+        self.lb_ranks.config(state="disabled")
+        self.lb_names.config(state="disabled")
+        self.lb_coins.config(state="disabled")
         self.master.send("/requestLeaderboard")
 
-    def updateLeaderboard(self, rawStr):
+    def update_leaderboard(self, raw_str):
         """
-        ClientUI.updateLeaderboard(rawStr)
+        ClientUI.update_leaderboard(raw_str)
         Updates the leaderboard with a raw string.
         """
-        if not hasattr(self, "lbRanks"):
+        if not hasattr(self, "lb_ranks"):
             self.create_leaderboard()
-        rawInfo = rawStr.split(" ")
-        info = []
-        for i in rawInfo:
-            info.append(i.split(","))
+        info = [
+            i.split(",")
+            for i in raw_str.split(" ")
+        ]
 
-        self.lbRanks.config(state="normal")
-        self.lbNames.config(state="normal")
-        self.lbCoins.config(state="normal")
-        self.lbRanks.delete(1, "end")
-        self.lbNames.delete(1, "end")
-        self.lbCoins.delete(1, "end")
+        self.lb_ranks.config(state="normal")
+        self.lb_names.config(state="normal")
+        self.lb_coins.config(state="normal")
+        self.lb_ranks.delete(1, "end")
+        self.lb_names.delete(1, "end")
+        self.lb_coins.delete(1, "end")
 
         for i in range(len(info)):
-            self.lbRanks.insert("end", i + 1)
-            self.lbNames.insert("end", info[i][0])
-            self.lbCoins.insert("end", info[i][1])
-        self.lbRanks.config(state="disabled")
-        self.lbNames.config(state="disabled")
-        self.lbCoins.config(state="disabled")
+            self.lb_ranks.insert("end", i + 1)
+            self.lb_names.insert("end", info[i][0])
+            self.lb_coins.insert("end", info[i][1])
+        self.lb_ranks.config(state="disabled")
+        self.lb_names.config(state="disabled")
+        self.lb_coins.config(state="disabled")
 
     def del_account(self):
         """
@@ -833,37 +838,37 @@ class ClientUI():
             try_del_account(event = None)
             Inconvenient handle for return.
             """
-            if len(self.daPassEntry.get()) == 0:
+            if len(self.da_pass_entry.get()) == 0:
                 return
             self.master.send("/delacc " + hashlib.sha512(
-                (self.daPassEntry.get() + self.master.username).encode()).hexdigest())
-            self.daPassEntry.delete(0, "end")
-            self.daPassEntry.focus_set()
+                (self.da_pass_entry.get() + self.master.username).encode()).hexdigest())
+            self.da_pass_entry.delete(0, "end")
+            self.da_pass_entry.focus_set()
 
         self.dawin = tk.Toplevel(self.master)
-        self.toplevels.add(self.dawin)
+        self.top_levels.add(self.dawin)
         self.dawin.transient(self.master)
         self.dawin.title("Delete your account")
         self.dawin.config(bg=self.bg)
         self.dawin.grid_columnconfigure(2, weight=1)
 
         # self.dawin.iconbitmap(self.icon_dir)
-        self.daTitle = tk.Label(
+        self.da_title = tk.Label(
             self.dawin, text="To confirm deletion, please enter your password below. ",
             font=self.font, fg=self.fg, bg=self.bg
         )
-        self.daPassEntry = ttk.Entry(self.dawin, width=50, font=self.font)
-        self.daPassEntry.config(show="•")
-        self.daPassEntry.focus_set()
-        self.delButton = ttk.Button(
+        self.da_pass_entry = ttk.Entry(self.dawin, width=50, font=self.font)
+        self.da_pass_entry.config(show="•")
+        self.da_pass_entry.focus_set()
+        self.del_button = ttk.Button(
             self.dawin, width=17,  text="Delete Account", command=try_del_account)
 
         ttk.Label(self.dawin, text="Password: ").grid(
             row=1, column=1, padx=(5, 0))
 
-        self.daTitle.grid(row=0, column=2, padx=5, pady=5)
-        self.daPassEntry.grid(row=1, column=2, padx=5, pady=5, sticky="we")
-        self.delButton.grid(row=2, column=2, padx=5, pady=5)
+        self.da_title.grid(row=0, column=2, padx=5, pady=5)
+        self.da_pass_entry.grid(row=1, column=2, padx=5, pady=5, sticky="we")
+        self.del_button.grid(row=2, column=2, padx=5, pady=5)
         self.dawin.bind("<Return>", try_del_account)
 
     def change_password(self):
@@ -891,14 +896,14 @@ class ClientUI():
             self.cp_pass_entry.focus_set()
 
         self.cpwin = tk.Toplevel(self.master)
-        self.toplevels.add(self.cpwin)
+        self.top_levels.add(self.cpwin)
         self.cpwin.transient(self.master)
         self.cpwin.title("Delete your account")
         self.cpwin.config(bg=self.bg)
         self.cpwin.grid_columnconfigure(2, weight=1)
 
         # self.cpwin.iconbitmap(self.icon_dir)
-        self.cpTitle = tk.Label(
+        self.cp_title = tk.Label(
             self.cpwin, text="To change your password, please enter your info below. ",
             font=self.font, fg=self.fg, bg=self.bg
         )
@@ -917,7 +922,7 @@ class ClientUI():
         ttk.Label(self.cpwin, text="New Password: ").grid(
             row=2, column=1, padx=(5, 0))
 
-        self.cpTitle.grid(row=0, column=2, padx=5, pady=5, columnspan=2)
+        self.cp_title.grid(row=0, column=2, padx=5, pady=5, columnspan=2)
         self.cp_pass_entry.grid(row=1, column=2, padx=5, pady=5, sticky="we")
         self.cp_new_pass_entry.grid(
             row=2, column=2, padx=5, pady=5, sticky="we")

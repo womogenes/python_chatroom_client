@@ -96,7 +96,7 @@ Text in square brackets is to be interpreted as a variable.
 
 **`/requestLeaderboard`**
 - This is used to request a list of all users and the amount of coins they have. 
-- See "**`/updateLeaderboard`**" in the **Commands (from the server)** section. 
+- See "**`/update_leaderboard`**" in the **Commands (from the server)** section. 
 
 **`/requestHash`**
 - This is used for mining. If you don't care about mining, you can ignore this command. The server will send you the message `/newHash [string]` to inform you of the hash of the most recent block in the blockchain. 
@@ -145,10 +145,10 @@ Depending on what you send, the server will send some messages back. The followi
 **`/newHash [string]`**
 - This is for mining purposes only. This message tells you that somebody has successfully mined, thus a new block has been added to the blockchain. You should modify some variable so that you mine based on this new string. 
 
-**`/updateLeaderboard [data]`**
+**`/update_leaderboard [data]`**
 - This is to update your local copy of the leaderboard, and this message usually follows from you sending `/requestLeaderboard`. 
-- The server sends you stats for each user. For every user, their stat is `[user],[coins]`. Each stat is separated by a space and appended to the string `/updateLeaderboard`, with a space between the first data point and the `/updateLeaderboard`. 
-- For example, it might be `/updateLeaderboard Joe,10 Bob,100, Smith,0`. 
+- The server sends you stats for each user. For every user, their stat is `[user],[coins]`. Each stat is separated by a space and appended to the string `/update_leaderboard`, with a space between the first data point and the `/update_leaderboard`. 
+- For example, it might be `/update_leaderboard Joe,10 Bob,100, Smith,0`. 
 
 **`/ping [data]`**
 - This follows from when you send a ping to the server via the `/ping` command. This is used to track how much time it takes for data to travel from your computer to the server and back. See the "`/ping`" section in **Commands (to the server)**. 

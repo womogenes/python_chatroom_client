@@ -43,9 +43,9 @@ class Client(tk.Tk):
     """
     This class handles all the data.
     I mean, like, all the connecting and socket stuff.
-    The main advantage of making a class is to keep track of attributes 
+    The main advantage of making a class is to keep track of attributes
         and functions.
-    This must be a subclass of tk.Tk because tkinter is so self-centered 
+    This must be a subclass of tk.Tk because tkinter is so self-centered
         and requires itself to be the main thread.
     """
 
@@ -183,8 +183,8 @@ class Client(tk.Tk):
                             elif commands[0] == "/newHash":
                                 self.prevHash = commands[1]
 
-                            elif commands[0] == "/updateLeaderboard":
-                                self.ui.updateLeaderboard(
+                            elif commands[0] == "/update_leaderboard":
+                                self.ui.update_leaderboard(
                                     " ".join(commands[1:]))
 
                             elif line.startswith("/ping"):
@@ -195,19 +195,20 @@ class Client(tk.Tk):
 
                             elif line.startswith("/e delacc "):
                                 self.ui.configure_title(
-                                    line[10:], self.ui.daTitle)
+                                    line[10:], self.ui.da_title)
 
                             elif line.startswith("/e changepass "):
                                 self.ui.configure_title(
-                                    line[14:], self.ui.cpTitle)
+                                    line[14:], self.ui.cp_title)
 
                         else:
                             _thread.start_new(self.ui.insert, (line,))
+
     def send(self, message, delete_entry=False):
         """
         Client.send(message, delete_entry = False)
         Send a message to the server.
-        This does stuff with the UI, could have used lambda, 
+        This does stuff with the UI, could have used lambda,
             but that would have taken too much space.
         """
         # First, parse the message for special commands.
@@ -217,9 +218,9 @@ class Client(tk.Tk):
         try:
             key = os.urandom(self.keyLength)
             aes = pyaes.AESModeOfOperationCTR(key)
-            aes_key = rsa.encrypt(key, self.serverKey)
-            keyAndMessage = aes_key + aes.encrypt(message)
-            self.server.send(keyAndMessage + b"\n" * 5)
+            aes_key = rsa.encrypt(key, self.server_key)
+            key_and_message = aes_key + aes.encrypt(message)
+            self.server.send(key_and_message + b"\n" * 5)
 
             if delete_entry:
                 self.ui.entry.delete(0, "end")
@@ -268,9 +269,9 @@ class Client(tk.Tk):
 
         message = self.server.recv(2048)
         try:
-            serverKey = message.decode().split("\n")
-            self.serverKey = rsa.PublicKey(
-                int(serverKey[0]), int(serverKey[1]))
+            server_key = message.decode().split("\n")
+            self.server_key = rsa.PublicKey(
+                int(server_key[0]), int(server_key[1]))
 
         except:
             # I dunno! Let the server tell us.
@@ -334,10 +335,10 @@ class Client(tk.Tk):
         self.username = username
 
         # Wait for server's public IP to send.
-        serverKey = self.server.recv(2048).decode()
+        server_key = self.server.recv(2048).decode()
         try:
-            serverKey = [int(n) for n in serverKey.split("\n")]
-            self.serverKey = rsa.PublicKey(serverKey[0], serverKey[1])
+            server_key = [int(n) for n in server_key.split("\n")]
+            self.server_key = rsa.PublicKey(server_key[0], server_key[1])
 
         except:
             # Probably denied access.
