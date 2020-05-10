@@ -19,7 +19,7 @@ import rsa
 import pyaes
 
 # ExTeRnAl ImPoRtS!?
-import clientUI
+import client_ui
 import Mining
 
 
@@ -73,7 +73,7 @@ class Client(tk.Tk):
 
         # Attributes.
         self.port = port
-        self.ui = clientUI.ClientUI(self)
+        self.ui = client_ui.ClientUI(self)
         self.username = ""
         self.dead = False
         self.key_length = 16
