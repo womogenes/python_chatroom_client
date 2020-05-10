@@ -264,8 +264,7 @@ class ClientUI():
                 label = tk.Label(
                     nf_win, bg=self.bg, text=f"{username}> {substance}", font=self.font)
 
-            description.grid(row=0, column=0, padx=20,
-                             pady=(20, 0), sticky="w")
+            description.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="w")
             label.grid(row=1, column=0, padx=20, sticky="w")
 
             close_button = ttk.Button(

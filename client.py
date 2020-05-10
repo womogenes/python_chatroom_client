@@ -330,7 +330,9 @@ class Client(tk.Tk):
             return
 
         print(
-            f"Attempting login at server with IP {self.ui.entries[0].get()}, {str(datetime.now())[:-7]}", end="... ")
+            f"Attempting login at server with IP {self.ui.entries[0].get()}, {str(datetime.now())[:-7]}",
+            end="... "
+        )
         # self.ui.configure_cursor("wait")
         self.username = username
 
