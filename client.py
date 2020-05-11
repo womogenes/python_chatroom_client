@@ -68,7 +68,8 @@ class Client(tk.Tk):
                 json.dump({
                     "version": "v5.0.5", "agreedToTaC": True, "fontSize": 11,
                     "notifications": False, "loginInfo": ["", "", ""],
-                    "money": 0, "cookies": 0}, f)
+                    "money": 0, "cookies": 0
+                }, f)
         with open(self.user_data, "r") as f:
             self.data = json.load(f)
 
