@@ -50,6 +50,7 @@ class Client(tk.Tk):
     This must be a subclass of tk.Tk because tkinter is so self-centered
         and requires itself to be the main thread.
     """
+    user_data = "data.json"
 
     def __init__(self, port):
         """
@@ -62,9 +63,15 @@ class Client(tk.Tk):
         tk.Tk.__init__(self)
 
         # Load data!
-        f = open("data.txt", "r")
-        self.data = json.load(f)
-        f.close()
+        if not os.path.exists(self.user_data):
+            with open(self.user_data, "w") as f:
+                json.dump({
+                    "version": "v5.0.5", "agreedToTaC": True, "fontSize": 11,
+                    "notifications": False, "loginInfo": ["", "", ""],
+                    "money": 0, "cookies": 0
+                }, f)
+        with open(self.user_data, "r") as f:
+            self.data = json.load(f)
 
         print("Generating encryption keys...")
         keys = rsa.newkeys(256)
@@ -376,9 +383,8 @@ class Client(tk.Tk):
         Client.save_data()
         Saves self.data into data.txt.
         """
-        f = open("data.txt", "w")
-        json.dump(self.data, f)
-        f.close()
+        with open(user_data, "w") as f:
+            json.dump(self.data, f)
 
 
 # Detect if running in IDLE or not.
