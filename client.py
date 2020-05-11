@@ -50,6 +50,7 @@ class Client(tk.Tk):
     This must be a subclass of tk.Tk because tkinter is so self-centered
         and requires itself to be the main thread.
     """
+    login_data = "data.txt"
 
     def __init__(self, port):
         """
@@ -62,9 +63,14 @@ class Client(tk.Tk):
         tk.Tk.__init__(self)
 
         # Load data!
-        f = open("data.txt", "r")
-        self.data = json.load(f)
-        f.close()
+        if not os.path.exists(self.login_data):
+            with open(self.login_data, "w") as f:
+                json.dump({
+                    "version": "v5.0.5", "agreedToTaC": True, "fontSize": 11,
+                    "notifications": False, "loginInfo": ["", "", ""],
+                    "money": 0, "cookies": 0}, f)
+        with open(self.login_data, "r") as f:
+            self.data = json.load(f)
 
         print("Generating encryption keys...")
         keys = rsa.newkeys(256)
@@ -253,8 +259,7 @@ class Client(tk.Tk):
                 "Password must be 8 characters or more. ", self.ui.title)
 
         # Connect to the server.
-        self.ui.configure_title("Creating new account...",
-                                self.ui.title, self.ui.fg)
+        self.ui.configure_title("Creating new account...", self.ui.title, self.ui.fg)
         # self.ui.configure_cursor("wait")
         try:
             self.server.connect((ip, self.port))
@@ -376,9 +381,8 @@ class Client(tk.Tk):
         Client.save_data()
         Saves self.data into data.txt.
         """
-        f = open("data.txt", "w")
-        json.dump(self.data, f)
-        f.close()
+        with open(login_data, "w") as f:
+            json.dump(self.data, f)
 
 
 # Detect if running in IDLE or not.
