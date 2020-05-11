@@ -394,7 +394,7 @@ class ClientUI():
         self.options_menu.add_separator()
         self.options_menu.add_checkbutton(
             label="Notifications", variable=self.notifications,
-            command=self.configure_notification
+            command=self.configure_notifications
         )
 
         self.acc_menu = tk.Menu(self.menubar, tearoff=0, font=self.s_font)
@@ -422,7 +422,7 @@ class ClientUI():
         )
 
         self.chats.grid(
-            ow=2, column=0, padx=5, pady=5, columnspan=2, sticky="new"
+            row=2, column=0, padx=5, pady=5, columnspan=2, sticky="new"
         )
         self.entry.grid(
             row=3, column=1, padx=(0, 5), pady=5, columnspan=2, sticky="swe"
