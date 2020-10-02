@@ -26,7 +26,7 @@ Starting from v4.0, we made some updates to the code structure. We rewrote v4.0 
 If you don't know how to run Python programs, we don't want to explain everything here, but you can learn how to by searching on the internet or on Stack Overflow (https://stackoverflow.com).
 
 ## Mining
-We added currency as just a fun thing. However, there wasn't really any good way to earn currency, so we made something a bit like Bitcoin. If you don't know how that works, here's a great video for learning the very basics: https://www.youtube.com/watch?v=wTC31ZI6QM4.
+We added currency as just a fun thing. However, there wasn't really any good way to earn currency, so we made something a bit like Bitcoin. If you don't know how that works, [here's a great video for learning the very basics:](https://www.youtube.com/watch?v=wTC31ZI6QM4.)
 
 The details of mining are in the Mining.py file. You can edit that file to make or adapt your mining strategy. (It starts out empty.) Here's the overview.
 
