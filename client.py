@@ -1,4 +1,3 @@
-
 # Python Chatroom Client
 # Made by womogenes.
 
@@ -12,7 +11,13 @@ import sys
 import os
 import time
 import tkinter as tk
+import tkinter.messagebox
+import tkinter.colorchooser
 from datetime import datetime
+
+# Solve high-DPI issues on Windows
+from ctypes import windll
+windll.shcore.SetProcessDpiAwareness(1)
 
 # Encryption libraries.=
 import rsa
@@ -383,7 +388,7 @@ class Client(tk.Tk):
         Client.save_data()
         Saves self.data into data.txt.
         """
-        with open(user_data, "w") as f:
+        with open("./data.txt", "w") as f:
             json.dump(self.data, f)
 
 

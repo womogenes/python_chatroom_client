@@ -376,7 +376,7 @@ class ClientUI():
         )
         self.help_menu.add_command(
             label="API Documentation",
-            command=lambda: self.text_window("API Documentation", "api.txt")
+            command=lambda: self.text_window("API Documentation", "api.md")
         )
         self.menubar.add_cascade(label="Help", menu=self.help_menu)
 
